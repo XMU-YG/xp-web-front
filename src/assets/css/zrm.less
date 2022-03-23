@@ -1,0 +1,106 @@
+//tag
+.custom-tag{
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: underline;
+  color: #000 !important;
+  background-color: rgba(0,0,0,0) !important;
+  border:none !important;
+  font-size: 14px !important;
+  margin-right: 15px !important;
+  padding:0 !important;
+  cursor: pointer;
+}
+.custom-tag-waring{
+  //color: @text-waring-color !important;
+}
+
+//rate
+.custom-rate{
+  .ant-rate-star-full{
+    //color:  @icon-waring-color !important;
+  }
+  .ant-rate-star-half{
+    .ant-rate-star-first{
+      //color:  @icon-waring-color;
+    }
+    .ant-rate-star-second{
+      //color:  @icon-primary-color;
+    }
+  }
+  .ant-rate-star-zero{
+    .ant-rate-star-first,
+    .ant-rate-star-second{
+      //color:  @icon-primary-color;
+    }
+  }
+}
+.custom-rate-text{
+  font-size: 14px;
+  font-weight: bold;
+  //color:  @text-waring-color !important;
+}
+
+//多选
+.custom-checkbox{
+  .ant-checkbox{
+    .ant-checkbox-inner{
+      width: 16px;
+      height: 16px;
+      //background: @check-primary-background;
+      //border: 2px solid @check-primary-border !important;
+    }
+  }
+  .ant-checkbox-wrapper-checked{
+    .ant-checkbox-checked{
+      .ant-checkbox-inner {
+        width: 16px;
+        height: 16px;
+        //background: @check-waring-background;
+        //border: 2px solid @check-waring-border !important;
+      }
+      .ant-checkbox-inner::after{
+        //border: 2px solid @check-waring-border;
+        border-top: 0;
+        border-left: 0;
+      }
+    }
+    span{
+      font-weight: 400 !important;
+      //color: @text-waring-color !important;
+    }
+  }
+  .ant-checkbox-checked::after{
+    border: none;
+  }
+}
+
+//单选
+.custom-radio{
+  .ant-radio-input{
+    width: 16px;
+    height: 16px;
+  }
+  .ant-radio-inner{
+    //border: 1px solid @check-primary-border;
+    //background: @check-primary-background;
+  }
+  .ant-radio-inner::after{
+    //background:  @radio-waring-background;
+  }
+  .ant-radio-checked {
+    .ant-radio-inner{
+      //border: 1px solid  @check-waring-border !important;
+    }
+  }
+  .ant-radio-checked + span{
+    //color:  @text-waring-color;
+    font-weight: 400;
+  }
+  .ant-radio-wrapper:hover .ant-radio,
+  .ant-radio:hover .ant-radio-inner,
+  .ant-radio-input:focus + .ant-radio-inner{
+    //border-color: @check-primary-border;
+  }
+}
+

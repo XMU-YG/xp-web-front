@@ -1,0 +1,6 @@
+dist
+dist/*
+node-modules
+node-modules/**/*.js
+eslintrc.js
+vue.config.js

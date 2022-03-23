@@ -1,0 +1,20 @@
+version: '3.2'
+networks:
+  integrated-dev-net:
+    external: true
+services:
+  front-end-management:
+    networks:
+    - integrated-dev-net
+    environment:
+      APP_HOST_NAME: http://117.187.141.34:18002
+      SERVICE_HOST_NAME: http://117.187.141.34:3005
+    image: com.zrys.integrated/front-end-management:latest
+    ports:
+    - 10000:80
+  test-back:
+    networks:
+    - integrated-dev-net
+    image: com.zrys.integrated/front-test-back:latest
+    ports:
+    - 3005:3005
