@@ -34,7 +34,7 @@ export default {
 
 <style scoped lang="less">
 .card-box {
-  border: 1px solid #cecece;
+  box-shadow: 0px 0px 10px 0px rgba(48, 49, 51, 0.2);
   padding: 20px;
   display: flex;
   .img img {
