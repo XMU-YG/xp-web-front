@@ -11,7 +11,14 @@
           @search="onSearch"
         />
       </div>
-      <Card />
+      <a-row :gutter="[10, 20]" style="width: 100%">
+        <a-col :xxl="12" :xl="12" v-for="item in 20" :key="item">
+          <Card />
+        </a-col>
+      </a-row>
+      <div class="pagination">
+        <a-pagination v-model:current="current" :total="500" />
+      </div>
     </div>
   </portalTemplate>
 </template>
@@ -26,7 +33,9 @@ export default {
     Card
   },
   setup() {
-    const state = reactive({})
+    const state = reactive({
+      current: 1
+    })
 
     return {
       ...toRefs(state)
@@ -39,5 +48,9 @@ export default {
 .search {
   text-align: right;
   margin-bottom: 20px;
+}
+.pagination {
+  margin-top: 20px;
+  text-align: right;
 }
 </style>

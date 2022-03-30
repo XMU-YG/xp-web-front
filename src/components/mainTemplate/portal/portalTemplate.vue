@@ -46,7 +46,7 @@
               mode="horizontal"
               @select="select"
             >
-              <a-menu-item key="mail"> 首页 </a-menu-item>
+              <a-menu-item key="portal-home"> 首页 </a-menu-item>
               <a-menu-item key="assisted-student"> 受助学生 </a-menu-item>
               <a-menu-item key="tutor-service"> 导师服务 </a-menu-item>
               <a-menu-item key="volunteer-service"> 志愿者服务 </a-menu-item>

@@ -11,7 +11,7 @@
             <span><BankOutlined class="icon" />贵州大学</span>
           </a-col>
           <a-col :xxl="12" :xl="12">
-            <span><SendOutlined class="icon" />1770853****</span>
+            <span><PhoneOutlined class="icon" />1770853****</span>
           </a-col>
         </a-row>
       </div>
@@ -55,7 +55,7 @@ export default {
       padding: 20px 0;
       .icon {
         font-size: 16px;
-        margin-right: 10px;
+        margin-right: 8px;
         color: #3eb4f2;
       }
     }
