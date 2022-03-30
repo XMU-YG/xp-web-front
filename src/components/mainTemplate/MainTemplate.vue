@@ -13,7 +13,8 @@
         <Menu :isCollapsed="isCollapsed" />
       </a-layout-sider>
       <a-layout-content class="layout-content">
-        <router-view class="main-content-wrap" />
+        <!--        <router-view class="main-content-wrap" />-->
+        <slot></slot>
       </a-layout-content>
     </a-layout>
   </a-layout>

@@ -97,6 +97,7 @@ export default {
     })
     //页面加载完成后，判断当前路由，并把他赋值给菜单
     onMounted(() => {
+      console.log(menuList.value)
       const name = route.name
       state.openMenu = findOpenKey(name)
       state.currentMenu = [name]
@@ -115,14 +116,14 @@ export default {
           item.children && item.children.some(child => child.name === name)
       )
 
-      result.push(one.path)
-      let two = floatMenu.value.find(
-        item =>
-          item.children && item.children.some(child => child.path === one.path)
-      )
-      if (two) {
-        result.push(two.path)
-      }
+      // result.push(one.path)
+      // let two = floatMenu.value.find(
+      //   item =>
+      //     item.children && item.children.some(child => child.path === one.path)
+      // )
+      // if (two) {
+      //   result.push(two.path)
+      // }
 
       return result
     }
