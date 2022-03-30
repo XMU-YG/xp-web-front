@@ -122,7 +122,7 @@ export default {
       border-bottom: 2px solid #fff;
     }
     ul.ant-menu-overflow.ant-menu.ant-menu-root.ant-menu-horizontal.ant-menu-light {
-      padding: 0 30%;
+      padding: 0 26%;
     }
     .title-wrapper {
       margin: 0 auto;

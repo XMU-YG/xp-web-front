@@ -53,5 +53,13 @@ module.exports = {
       preProcessor: 'less',
       patterns: [path.resolve(__dirname, './src/assets/css/style/var.less')]
     }
+  },
+
+  chainWebpack: config =>{
+    config.plugin('html')
+      .tap(args => {
+        args[0].title = "小平基金会管理系统";
+        return args;
+      })
   }
 }

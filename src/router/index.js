@@ -27,8 +27,8 @@ routeBakList = routeBakList.filter(item => item.component)
 const routes = [
   {
     path: '/',
-    name: 'MainTemplate',
-    component: MainTemplate,
+    name: 'home',
+    component: Home,
     children: null
   },
   {
