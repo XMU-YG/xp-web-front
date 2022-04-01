@@ -185,6 +185,7 @@ export default {
     }
   }
   /deep/ main.ant-layout-content {
+    height: 100%;
     width: 1200px;
     margin: 0 auto;
   }

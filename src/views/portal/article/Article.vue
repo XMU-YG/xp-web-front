@@ -42,7 +42,7 @@
           </div>
         </a-tab-pane>
         <template #tabBarExtraContent>
-          <a-button>我要发布</a-button>
+          <a-button @click="publishBtn">我要发布</a-button>
         </template>
       </a-tabs>
     </div>
@@ -53,6 +53,7 @@
 import { reactive, toRefs } from 'vue'
 import portalTemplate from '@/components/mainTemplate/portal/portalTemplate'
 import Card from './components/Card'
+import { useRouter } from 'vue-router'
 export default {
   components: {
     portalTemplate,
@@ -64,8 +65,16 @@ export default {
       activeKey: '1'
     })
 
+    const router = useRouter()
+
+    function publishBtn() {
+      console.log(router, 'router')
+      router.push('/publish')
+    }
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      publishBtn
     }
   }
 }
