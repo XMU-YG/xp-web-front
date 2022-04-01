@@ -1,5 +1,6 @@
 <template>
   <portalTemplate>
+    <div class="nav">导师服务</div>
     <div class="main-content-box">
       <a-table
         :columns="columns"
@@ -8,17 +9,28 @@
         size="middle"
         :pagination="false"
       >
-        <template #time="{ record }">
-          <a-month-picker
-            v-model:value="record.time"
-            format="YYYY-MM"
-            style="width: 100%"
-            :disabledDate="disabledDate"
+        <template #operation="{ record }">
+          <a @click="lookReport(record)" style="text-decoration: underline"
+            >查看成绩报告</a
           >
-          </a-month-picker>
         </template>
       </a-table>
     </div>
+    <a-modal
+      width="800px"
+      v-model:visible="visible"
+      title="已提交成绩报告"
+      @ok="handleOk"
+    >
+      <a-table
+        :columns="columnsReport"
+        rowKey="id"
+        :dataSource="dataSource"
+        size="middle"
+        :pagination="false"
+      >
+      </a-table>
+    </a-modal>
   </portalTemplate>
 </template>
 
@@ -31,6 +43,25 @@ export default {
   },
   setup() {
     const state = reactive({
+      visible: false,
+      currentObj: {},
+      columnsReport: [
+        {
+          title: '标题',
+          dataIndex: 'name',
+          key: 'name'
+        },
+        {
+          title: '作者',
+          dataIndex: 'tel',
+          key: 'tel'
+        },
+        {
+          title: '上传时间',
+          dataIndex: 'tel',
+          key: 'tel'
+        }
+      ],
       columns: [
         {
           title: '小平编号',
@@ -51,7 +82,7 @@ export default {
           title: '操作',
           dataIndex: 'operation',
           key: 'operation',
-          width: '60px',
+          width: '140px',
           fixed: 'right',
           slots: { customRender: 'operation' }
         }
@@ -78,8 +109,14 @@ export default {
       ]
     })
 
+    function lookReport(record) {
+      state.visible = true
+      state.currentObj = record
+    }
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      lookReport
     }
   }
 }
