@@ -3,15 +3,12 @@
   <div class="bg-box"></div>
   <div class="login-wrapper">
     <div class="login-box">
-      <div class="big-title">小平教育基金管理系统</div>
+      <div class="big-title">小平基金会管理系统</div>
       <a-form
         ref="formRef"
         :model="formState"
         :rules="rules"
-        style="
-          width: 100%;
-          box-shadow: inset 0px 0px 30px rgb(180 216 255 / 40%);
-        "
+        style="width: 100%"
         class="login-form"
       >
         <div class="little-title">用户登录</div>
@@ -53,7 +50,7 @@
 </template>
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
-import { useRouter } from 'vue-router'
+import { message } from 'ant-design-vue'
 export default defineComponent({
   setup() {
     const state = reactive({
@@ -91,8 +88,6 @@ export default defineComponent({
       }
     })
 
-    const router = useRouter()
-
     const formRef = ref()
     //验证及保存
     const okBtn = () => {
@@ -112,7 +107,6 @@ export default defineComponent({
         type: state.formState.type
       }
       console.log(params, 'params')
-      router.push('/portal-home')
     }
 
     return {
@@ -130,10 +124,15 @@ export default defineComponent({
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(#096bcc, #3eb4f2);
+  background-image: url('./bg_img.png');
   background-size: 100% 100%;
   background-position: center center;
   overflow: auto;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
 }
 .login-wrapper {
   width: 100%;
@@ -146,32 +145,27 @@ export default defineComponent({
     .big-title {
       font-size: 24px;
       font-weight: bold;
-      color: #fff;
+      color: #096bcc;
       text-align: center;
       margin-bottom: 20px;
     }
     .login-form {
-      border-radius: 20px;
+      background: #fff;
       width: 520px;
       height: 364px;
       overflow: hidden;
       padding: 20px 40px;
       .little-title {
-        color: #fff;
-        font-size: 16px;
+        color: #096bcc;
+        font-size: 18px;
         text-align: center;
         margin-bottom: 20px;
       }
       /deep/ .ant-form-item-label > label,
+      /deep/ .ant-input,
       label,
       img {
-        color: #fff;
-      }
-      input {
-        background-color: rgba(255, 255, 255, 0.05);
-        border: 1px solid #096bcc;
-        outline: none;
-        color: #fff;
+        color: #096bcc;
       }
       /deep/ .ant-btn-primary {
         color: #fff;
