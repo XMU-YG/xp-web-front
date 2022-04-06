@@ -39,12 +39,12 @@ const routes = [
     component: Login,
     children: null
   },
-  // {
-  //   path: '/portal-home',
-  //   name: 'home',
-  //   component: Home,
-  //   children: null
-  // },
+  {
+    path: '/portal-home',
+    name: 'home',
+    component: Home,
+    children: null
+  },
   {
     path: '/assisted-student',
     name: 'assistedStudent',
