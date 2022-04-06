@@ -1,6 +1,9 @@
 <template>
   <portalTemplate>
-    <div>受助相关</div>
+    <div class="nav">受助相关</div>
+    <div class="main-content-box">
+      受助相关受助相关受助相关受助相关受助相关受助相关
+    </div>
   </portalTemplate>
 </template>
 

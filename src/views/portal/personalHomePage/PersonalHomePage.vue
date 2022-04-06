@@ -1,6 +1,9 @@
 <template>
   <portalTemplate>
-    <div>个人主页</div>
+    <div class="nav">个人主页</div>
+    <div class="main-content-box">
+      个人主页个人主页个人主页个人主页个人主页个人主页个人主页
+    </div>
   </portalTemplate>
 </template>
 

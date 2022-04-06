@@ -51,7 +51,7 @@
               <a-menu-item key="tutor-service"> 导师服务 </a-menu-item>
               <a-menu-item key="volunteer-service"> 志愿者服务 </a-menu-item>
               <a-menu-item key="about-assisted"> 受助相关 </a-menu-item>
-              <a-menu-item key="article "> 文章帖子 </a-menu-item>
+              <a-menu-item key="article"> 文章帖子 </a-menu-item>
               <a-menu-item key="personal-page"> 个人主页 </a-menu-item>
             </a-menu>
           </div>

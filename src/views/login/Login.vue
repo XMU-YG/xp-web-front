@@ -51,6 +51,7 @@
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { message } from 'ant-design-vue'
+import { useRouter } from 'vue-router'
 export default defineComponent({
   setup() {
     const state = reactive({
@@ -88,6 +89,8 @@ export default defineComponent({
       }
     })
 
+    const router = useRouter()
+
     const formRef = ref()
     //验证及保存
     const okBtn = () => {
@@ -107,6 +110,7 @@ export default defineComponent({
         type: state.formState.type
       }
       console.log(params, 'params')
+      router.push('/portal-home')
     }
 
     return {

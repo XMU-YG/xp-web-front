@@ -1,5 +1,6 @@
 <template>
   <portalTemplate>
+    <div class="nav">首页</div>
     <div class="top">
       <a-carousel autoplay>
         <div>
