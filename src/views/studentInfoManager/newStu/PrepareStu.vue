@@ -1,223 +1,229 @@
 <!-- 预受助学生管理 -->
 <template>
-  <div>
-    <a-tabs type="card" v-model:activeKey="activeKey">
-      <a-tab-pane key="list" tab="预计受助学生管理" :closable="false">
-        <div class="table-list-top">
-          <div class="filter-box">
-            <a-row style="width: 100%" :gutter="[24, 24]">
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">学生搜索：</span>
-                  <a-input-search
-                    v-model:value="search.fileTitle"
-                    placeholder="请输入学生名字关键字"
-                    @search="getTableData"
-                    class="common-input"
-                  />
-                </a-space>
-              </a-col>
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">性别：</span>
-                  <a-select
-                    class="common-select"
-                    allow-clear
-                    v-model:value="search.markFlag"
-                    ref="select"
-                    style="width: 100%"
-                    @change="flagChange"
-                    placeholder="请选择"
-                  >
-                    <a-select-option value="true">男</a-select-option>
-                    <a-select-option value="false">女</a-select-option>
-                  </a-select>
-                </a-space>
-              </a-col>
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">年级：</span>
-                  <a-select
-                    class="common-select"
-                    allow-clear
-                    v-model:value="search.markFlag"
-                    ref="select"
-                    style="width: 100%"
-                    @change="flagChange"
-                    placeholder="请选择"
-                  >
-                    <a-select-option value="true">2017级</a-select-option>
-                    <a-select-option value="false">2018级</a-select-option>
-                  </a-select>
-                </a-space>
-              </a-col>
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">所属高中：</span>
-                  <a-select
-                    class="common-select"
-                    allow-clear
-                    v-model:value="search.markFlag"
-                    ref="select"
-                    style="width: 100%"
-                    @change="flagChange"
-                    placeholder="请选择"
-                  >
-                    <a-select-option value="true">计算机大类</a-select-option>
-                    <a-select-option value="false">医学大类</a-select-option>
-                  </a-select>
-                </a-space>
-              </a-col>
-            </a-row>
-          </div>
-          <div class="function-box">
-            <a-space>
-              <a-button
-                style="width: 60px; line-height: 32px"
-                title="重置"
-                class="default-btn"
-                @click="reloadTable"
-              >
-                <template #icon>
-                  <my-icon type="icon-qingchucachu" style="font-size: 28px" />
-                </template>
-              </a-button>
-              <a-button
-                style="width: 60px; line-height: 32px"
-                title="刷新"
-                class="default-btn"
-                @click="reloadTable"
-              >
-                <template #icon>
-                  <RedoOutlined style="font-size: 16px" />
-                </template>
-              </a-button>
-              <a-popover placement="bottom">
-                <template #content>
-                  <div>
-                    <a type="primary">批量通过</a>
-                  </div>
-                  <div>
-                    <a type="primary">批量删除</a>
-                  </div>
-                </template>
-                <a-button type="primary">批量操作</a-button>
-              </a-popover>
-            </a-space>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <a-table
-            class="custom-table"
-            :scroll="{ x: true }"
-            :dataSource="notStuList"
-            :columns="columns"
-            :loading="loading"
-            :pagination="{
-              current: pageIndex,
-              pageSize: pageSize,
-              total: total,
-              showTotal: infoTotal => `共${infoTotal}条`,
-              showQuickJumper: true,
-              onChange: changePage
-            }"
-          >
-            <template #markFlag="{ text }">
-              <PushpinFilled v-if="text === false" />
-              <PushpinFilled v-else style="color: #f37b6b" />
-            </template>
-            <template #operation="{ record }">
+  <MainTemplate>
+    <div>
+      <a-tabs type="card" v-model:activeKey="activeKey">
+        <a-tab-pane key="list" tab="预计受助学生管理" :closable="false">
+          <div class="table-list-top">
+            <div class="filter-box">
+              <a-row style="width: 100%" :gutter="[24, 24]">
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">学生搜索：</span>
+                    <a-input-search
+                      v-model:value="search.fileTitle"
+                      placeholder="请输入学生名字关键字"
+                      @search="getTableData"
+                      class="common-input"
+                    />
+                  </a-space>
+                </a-col>
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">性别：</span>
+                    <a-select
+                      class="common-select"
+                      allow-clear
+                      v-model:value="search.markFlag"
+                      ref="select"
+                      style="width: 100%"
+                      @change="flagChange"
+                      placeholder="请选择"
+                    >
+                      <a-select-option value="true">男</a-select-option>
+                      <a-select-option value="false">女</a-select-option>
+                    </a-select>
+                  </a-space>
+                </a-col>
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">年级：</span>
+                    <a-select
+                      class="common-select"
+                      allow-clear
+                      v-model:value="search.markFlag"
+                      ref="select"
+                      style="width: 100%"
+                      @change="flagChange"
+                      placeholder="请选择"
+                    >
+                      <a-select-option value="true">2017级</a-select-option>
+                      <a-select-option value="false">2018级</a-select-option>
+                    </a-select>
+                  </a-space>
+                </a-col>
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">所属高中：</span>
+                    <a-select
+                      class="common-select"
+                      allow-clear
+                      v-model:value="search.markFlag"
+                      ref="select"
+                      style="width: 100%"
+                      @change="flagChange"
+                      placeholder="请选择"
+                    >
+                      <a-select-option value="true">计算机大类</a-select-option>
+                      <a-select-option value="false">医学大类</a-select-option>
+                    </a-select>
+                  </a-space>
+                </a-col>
+              </a-row>
+            </div>
+            <div class="function-box">
               <a-space>
-                <a-tag class="custom-tag" @click="detailBtn(record)"
-                  >资助</a-tag
+                <a-button
+                  style="width: 60px; line-height: 32px"
+                  title="重置"
+                  class="default-btn"
+                  @click="reloadTable"
                 >
-                <a-tag class="custom-tag" @click="detailBtn(record)"
-                  >详情</a-tag
+                  <template #icon>
+                    <my-icon type="icon-qingchucachu" style="font-size: 28px" />
+                  </template>
+                </a-button>
+                <a-button
+                  style="width: 60px; line-height: 32px"
+                  title="刷新"
+                  class="default-btn"
+                  @click="reloadTable"
                 >
-                <a-tag
-                  class="custom-tag custom-tag-waring"
-                  @click="deleteBtn(record)"
-                  >删除</a-tag
-                >
+                  <template #icon>
+                    <RedoOutlined style="font-size: 16px" />
+                  </template>
+                </a-button>
+                <a-popover placement="bottom">
+                  <template #content>
+                    <div>
+                      <a type="primary">批量通过</a>
+                    </div>
+                    <div>
+                      <a type="primary">批量删除</a>
+                    </div>
+                  </template>
+                  <a-button type="primary">批量操作</a-button>
+                </a-popover>
               </a-space>
-            </template>
-          </a-table>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane key="detail" :tab="tabTitle" v-if="tabVisible">
-        <div class="detail-box">
-          <div class="detail-title">
-            <div class="left">
-              <img
-                alt=""
-                src="../../../assets/images/data-icon.png"
-                style="width: 70px; height: 70px"
-              />
-              <div class="name">
-                <p>XPF123-张荣美-2017届</p>
-                <p>关岭名族高级中学</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <a-table
+              class="custom-table"
+              :scroll="{ x: true }"
+              :dataSource="notStuList"
+              :columns="columns"
+              :loading="loading"
+              :pagination="{
+                current: pageIndex,
+                pageSize: pageSize,
+                total: total,
+                showTotal: infoTotal => `共${infoTotal}条`,
+                showQuickJumper: true,
+                onChange: changePage
+              }"
+            >
+              <template #markFlag="{ text }">
+                <PushpinFilled v-if="text === false" />
+                <PushpinFilled v-else style="color: #f37b6b" />
+              </template>
+              <template #operation="{ record }">
+                <a-space>
+                  <a-tag class="custom-tag" @click="detailBtn(record)"
+                    >资助</a-tag
+                  >
+                  <a-tag class="custom-tag" @click="detailBtn(record)"
+                    >详情</a-tag
+                  >
+                  <a-tag
+                    class="custom-tag custom-tag-waring"
+                    @click="deleteBtn(record)"
+                    >删除</a-tag
+                  >
+                </a-space>
+              </template>
+            </a-table>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="detail" :tab="tabTitle" v-if="tabVisible">
+          <div class="detail-box">
+            <div class="detail-title">
+              <div class="left">
+                <img
+                  alt=""
+                  src="../../../assets/images/data-icon.png"
+                  style="width: 70px; height: 70px"
+                />
+                <div class="name">
+                  <p>XPF123-张荣美-2017届</p>
+                  <p>关岭名族高级中学</p>
+                </div>
+              </div>
+              <div class="right">
+                <a-button type="primary" @click="approveBtn">审核</a-button>
               </div>
             </div>
-            <div class="right">
-              <a-button type="primary" @click="approveBtn">审核</a-button>
+            <div class="detail-content">
+              <div class="steps">
+                <a-steps :current="1" status="error">
+                  <a-step title="Finished" description="学生申请资料审核" />
+                  <a-step title="In Progress" description="家访资料审核" />
+                  <a-step title="Waiting" description="申请结果" />
+                </a-steps>
+              </div>
+              <div class="info">
+                <a-tabs type="card" v-model:activeKey="detailActiveKey">
+                  <a-tab-pane key="detailedInfo" tab="申请资料">
+                    申请资料申请资料申请资料申请资料申请资料
+                  </a-tab-pane>
+                  <a-tab-pane key="2" tab="家访资料"
+                    >家访资料家访资料家访资料家访资料</a-tab-pane
+                  >
+                </a-tabs>
+              </div>
             </div>
           </div>
-          <div class="detail-content">
-            <div class="steps">
-              <a-steps :current="1" status="error">
-                <a-step title="Finished" description="学生申请资料审核" />
-                <a-step title="In Progress" description="家访资料审核" />
-                <a-step title="Waiting" description="申请结果" />
-              </a-steps>
-            </div>
-            <div class="info">
-              <a-tabs type="card" v-model:activeKey="detailActiveKey">
-                <a-tab-pane key="detailedInfo" tab="申请资料">
-                  申请资料申请资料申请资料申请资料申请资料
-                </a-tab-pane>
-                <a-tab-pane key="2" tab="家访资料"
-                  >家访资料家访资料家访资料家访资料</a-tab-pane
-                >
-              </a-tabs>
-            </div>
-          </div>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
-    <a-modal
-      v-model:visible="visible"
-      title="审核信息"
-      width="500px"
-      @ok="okBtn"
-    >
-      <a-form
-        ref="formRef"
-        :model="formState"
-        :rules="rules"
-        style="width: 100%"
+        </a-tab-pane>
+      </a-tabs>
+      <a-modal
+        v-model:visible="visible"
+        title="审核信息"
+        width="500px"
+        @ok="okBtn"
       >
-        <a-form-item label="学生" name="name">
-          <a-input v-model:value="formState.name" disabled />
-        </a-form-item>
-        <a-form-item label="是否通过" name="isPass">
-          <a-radio-group v-model:value="formState.isPass">
-            <a-radio value="1">是</a-radio>
-            <a-radio value="2">否</a-radio>
-          </a-radio-group>
-        </a-form-item>
-        <a-form-item label="审批意见" name="desc">
-          <a-textarea v-model:value="formState.desc" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
-  </div>
+        <a-form
+          ref="formRef"
+          :model="formState"
+          :rules="rules"
+          style="width: 100%"
+        >
+          <a-form-item label="学生" name="name">
+            <a-input v-model:value="formState.name" disabled />
+          </a-form-item>
+          <a-form-item label="是否通过" name="isPass">
+            <a-radio-group v-model:value="formState.isPass">
+              <a-radio value="1">是</a-radio>
+              <a-radio value="2">否</a-radio>
+            </a-radio-group>
+          </a-form-item>
+          <a-form-item label="审批意见" name="desc">
+            <a-textarea v-model:value="formState.desc" />
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </div>
+  </MainTemplate>
 </template>
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { message } from 'ant-design-vue'
 import { Modal } from 'ant-design-vue'
 import { useNotStuList } from '@/hooks'
+import MainTemplate from '@/components/mainTemplate/MainTemplate'
 export default defineComponent({
+  components: {
+    MainTemplate
+  },
   setup() {
     const state = reactive({
       activeKey: 'list',

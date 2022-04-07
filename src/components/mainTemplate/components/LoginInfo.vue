@@ -13,6 +13,11 @@
         <template #overlay>
           <a-menu class="custom-menu">
             <a-menu-item key="logout">
+              <a-button type="link" class="link-btn" @click="returnPortal"
+                >返回门户</a-button
+              >
+            </a-menu-item>
+            <a-menu-item key="logout">
               <a-button type="link" class="link-btn" @click="logOut"
                 >登出</a-button
               >
@@ -28,20 +33,25 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
 import { getLogoutService } from '@/services'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'LoginInfo',
   setup() {
-    async function logOut() {
-      try {
-        await getLogoutService()
-      } catch (error) {
-        throw new Error(error)
-      }
+    const router = useRouter()
+
+    function logOut() {
+      router.push('/login')
     }
-    return { logOut }
+
+    function returnPortal() {
+      router.push('/portal-home')
+    }
+    return {
+      logOut,
+      returnPortal
+    }
   }
 }
 </script>

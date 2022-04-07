@@ -1,324 +1,328 @@
 <!-- 已受助学生 -->
 <template>
-  <div>
-    <a-tabs type="card" v-model:activeKey="activeKey">
-      <a-tab-pane key="list" tab="已受助学生" :closable="false">
-        <div class="table-list-top">
-          <div class="filter-box">
-            <a-row style="width: 100%" :gutter="[24, 24]">
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">学生搜索：</span>
-                  <a-input-search
-                    v-model:value="search.name"
-                    placeholder="请输入学生名字关键字"
-                    @change="onchange"
-                    class="common-input"
-                  />
-                </a-space>
-              </a-col>
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">性别：</span>
-                  <a-select
-                    class="common-select"
-                    allow-clear
-                    v-model:value="search.sex"
-                    ref="select"
-                    style="width: 100%"
-                    @change="onchange"
-                    placeholder="请选择"
-                  >
-                    <a-select-option value="男">男</a-select-option>
-                    <a-select-option value="女">女</a-select-option>
-                  </a-select>
-                </a-space>
-              </a-col>
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">年级：</span>
-                  <a-select
-                    class="common-select"
-                    allow-clear
-                    v-model:value="search.grade"
-                    ref="select"
-                    style="width: 100%"
-                    @change="onchange"
-                    placeholder="请选择"
-                  >
-                    <a-select-option value="2014级">2014级</a-select-option>
-                    <a-select-option value="2015级">2015级</a-select-option>
-                    <a-select-option value="2016级">2016级</a-select-option>
-                    <a-select-option value="2017级">2017级</a-select-option>
-                    <a-select-option value="2018级">2018级</a-select-option>
-                    <a-select-option value="2019级">2019级</a-select-option>
-                    <a-select-option value="2020级">2020级</a-select-option>
-                    <a-select-option value="2021级">2021级</a-select-option>
-                  </a-select>
-                </a-space>
-              </a-col>
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">专业：</span>
-                  <a-input-search
-                    v-model:value="search.major"
-                    placeholder="请输入专业名称关键字"
-                    @change="onchange"
-                    class="common-input"
-                  />
-                </a-space>
-              </a-col>
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">所属高中：</span>
-                  <a-select
-                    class="common-select"
-                    allow-clear
-                    v-model:value="search.highSchool"
-                    ref="select"
-                    style="width: 100%"
-                    @change="onchange"
-                    placeholder="请选择"
-                    showSearch
-                    :filter-option="filterOptionHighSchool"
-                  >
-                    <a-select-option
-                      v-for="item in highSchool"
-                      :key="item.key"
-                      :label="item.name"
-                      :value="item.name"
-                      >{{ item.name }}</a-select-option
+  <MainTemplate>
+    <div>
+      <a-tabs type="card" v-model:activeKey="activeKey">
+        <a-tab-pane key="list" tab="已受助学生" :closable="false">
+          <div class="table-list-top">
+            <div class="filter-box">
+              <a-row style="width: 100%" :gutter="[24, 24]">
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">学生搜索：</span>
+                    <a-input-search
+                      v-model:value="search.name"
+                      placeholder="请输入学生名字关键字"
+                      @change="onchange"
+                      class="common-input"
+                    />
+                  </a-space>
+                </a-col>
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">性别：</span>
+                    <a-select
+                      class="common-select"
+                      allow-clear
+                      v-model:value="search.sex"
+                      ref="select"
+                      style="width: 100%"
+                      @change="onchange"
+                      placeholder="请选择"
                     >
-                  </a-select>
-                </a-space>
-              </a-col>
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">所属大学：</span>
-                  <a-select
-                    class="common-select"
-                    allow-clear
-                    v-model:value="search.university"
-                    ref="select"
-                    style="width: 100%"
-                    @change="onchange"
-                    placeholder="请选择"
-                    showSearch
-                    :filter-option="filterOptionUniversity"
-                  >
-                    <a-select-option
-                      v-for="item in university"
-                      :key="item.key"
-                      :label="item.name"
-                      :value="item.name"
-                      >{{ item.name }}</a-select-option
+                      <a-select-option value="男">男</a-select-option>
+                      <a-select-option value="女">女</a-select-option>
+                    </a-select>
+                  </a-space>
+                </a-col>
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">年级：</span>
+                    <a-select
+                      class="common-select"
+                      allow-clear
+                      v-model:value="search.grade"
+                      ref="select"
+                      style="width: 100%"
+                      @change="onchange"
+                      placeholder="请选择"
                     >
-                  </a-select>
-                </a-space>
-              </a-col>
-              <a-col :xxl="12" :xl="12">
-                <a-space class="filter-space">
-                  <span class="label">学年制：</span>
-                  <a-select
-                    class="common-select"
-                    allow-clear
-                    v-model:value="search.schoolYear"
-                    ref="select"
-                    style="width: 100%"
-                    @change="onchange"
-                    placeholder="请选择"
-                  >
-                    <a-select-option value="4">四年制</a-select-option>
-                    <a-select-option value="5">五年制</a-select-option>
-                  </a-select>
-                </a-space>
-              </a-col>
-            </a-row>
-          </div>
-          <div class="function-box">
-            <a-space>
-              <a-button
-                style="width: 60px; line-height: 32px"
-                title="重置"
-                class="default-btn"
-                @click="resetBtn"
-              >
-                <template #icon>
-                  <my-icon type="icon-qingchucachu" style="font-size: 28px" />
-                </template>
-              </a-button>
-              <a-button
-                style="width: 60px; line-height: 32px"
-                title="刷新"
-                class="default-btn"
-                @click="refreshBtn"
-              >
-                <template #icon>
-                  <RedoOutlined style="font-size: 16px" />
-                </template>
-              </a-button>
-            </a-space>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <a-table
-            class="custom-table"
-            :scroll="{ x: true }"
-            :dataSource="alreadyStuList"
-            :columns="columns"
-            :loading="loading"
-            :pagination="{
-              current: pageIndex,
-              pageSize: pageSize,
-              total: total,
-              showTotal: infoTotal => `共${infoTotal}条`,
-              showQuickJumper: true,
-              onChange: changePage
-            }"
-          >
-            <template #markFlag="{ text }">
-              <PushpinFilled v-if="text === false" />
-              <PushpinFilled v-else style="color: #f37b6b" />
-            </template>
-            <template #operation="{ record }">
+                      <a-select-option value="2014级">2014级</a-select-option>
+                      <a-select-option value="2015级">2015级</a-select-option>
+                      <a-select-option value="2016级">2016级</a-select-option>
+                      <a-select-option value="2017级">2017级</a-select-option>
+                      <a-select-option value="2018级">2018级</a-select-option>
+                      <a-select-option value="2019级">2019级</a-select-option>
+                      <a-select-option value="2020级">2020级</a-select-option>
+                      <a-select-option value="2021级">2021级</a-select-option>
+                    </a-select>
+                  </a-space>
+                </a-col>
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">专业：</span>
+                    <a-input-search
+                      v-model:value="search.major"
+                      placeholder="请输入专业名称关键字"
+                      @change="onchange"
+                      class="common-input"
+                    />
+                  </a-space>
+                </a-col>
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">所属高中：</span>
+                    <a-select
+                      class="common-select"
+                      allow-clear
+                      v-model:value="search.highSchool"
+                      ref="select"
+                      style="width: 100%"
+                      @change="onchange"
+                      placeholder="请选择"
+                      showSearch
+                      :filter-option="filterOptionHighSchool"
+                    >
+                      <a-select-option
+                        v-for="item in highSchool"
+                        :key="item.key"
+                        :label="item.name"
+                        :value="item.name"
+                        >{{ item.name }}</a-select-option
+                      >
+                    </a-select>
+                  </a-space>
+                </a-col>
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">所属大学：</span>
+                    <a-select
+                      class="common-select"
+                      allow-clear
+                      v-model:value="search.university"
+                      ref="select"
+                      style="width: 100%"
+                      @change="onchange"
+                      placeholder="请选择"
+                      showSearch
+                      :filter-option="filterOptionUniversity"
+                    >
+                      <a-select-option
+                        v-for="item in university"
+                        :key="item.key"
+                        :label="item.name"
+                        :value="item.name"
+                        >{{ item.name }}</a-select-option
+                      >
+                    </a-select>
+                  </a-space>
+                </a-col>
+                <a-col :xxl="12" :xl="12">
+                  <a-space class="filter-space">
+                    <span class="label">学年制：</span>
+                    <a-select
+                      class="common-select"
+                      allow-clear
+                      v-model:value="search.schoolYear"
+                      ref="select"
+                      style="width: 100%"
+                      @change="onchange"
+                      placeholder="请选择"
+                    >
+                      <a-select-option value="4">四年制</a-select-option>
+                      <a-select-option value="5">五年制</a-select-option>
+                    </a-select>
+                  </a-space>
+                </a-col>
+              </a-row>
+            </div>
+            <div class="function-box">
               <a-space>
-                <a-tag class="custom-tag" @click="detailBtn(record)"
-                  >详情</a-tag
+                <a-button
+                  style="width: 60px; line-height: 32px"
+                  title="重置"
+                  class="default-btn"
+                  @click="resetBtn"
                 >
-                <a-tag class="custom-tag" @click="editBtn(record)">编辑</a-tag>
-                <a-tag
-                  class="custom-tag custom-tag-waring"
-                  @click="deleteBtn(record)"
-                  >删除</a-tag
+                  <template #icon>
+                    <my-icon type="icon-qingchucachu" style="font-size: 28px" />
+                  </template>
+                </a-button>
+                <a-button
+                  style="width: 60px; line-height: 32px"
+                  title="刷新"
+                  class="default-btn"
+                  @click="refreshBtn"
                 >
+                  <template #icon>
+                    <RedoOutlined style="font-size: 16px" />
+                  </template>
+                </a-button>
               </a-space>
-            </template>
-          </a-table>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane key="detail" :tab="tabTitle" v-if="tabVisible">
-        <div class="detail-box">
-          <div class="detail-title">
-            <img
-              alt=""
-              src="../../../assets/images/data-icon.png"
-              style="width: 70px; height: 70px"
-            />
-            <div class="name">
-              <p>
-                {{ stuDetail.xpNo }}-{{ stuDetail.name }}-20{{
-                  stuDetail.grade
-                }}届
-              </p>
-              <p>{{ stuDetail.university }}</p>
             </div>
           </div>
-          <div class="detail-content">
-            <div class="basic-info">
-              <a-descriptions title="基本信息">
-                <a-descriptions-item label="姓名">{{
-                  stuDetail.name
-                }}</a-descriptions-item>
-                <a-descriptions-item label="电话">{{
-                  stuDetail.phone
-                }}</a-descriptions-item>
-                <a-descriptions-item label="香港导师">
-                  {{ stuDetail.hkMentorName }}
-                </a-descriptions-item>
-                <a-descriptions-item label="高中">{{
-                  stuDetail.highSchool
-                }}</a-descriptions-item>
-                <a-descriptions-item label="生源地">{{
-                  stuDetail.highSchRegion
-                }}</a-descriptions-item>
-              </a-descriptions>
+          <div class="table-wrap">
+            <a-table
+              class="custom-table"
+              :scroll="{ x: true }"
+              :dataSource="alreadyStuList"
+              :columns="columns"
+              :loading="loading"
+              :pagination="{
+                current: pageIndex,
+                pageSize: pageSize,
+                total: total,
+                showTotal: infoTotal => `共${infoTotal}条`,
+                showQuickJumper: true,
+                onChange: changePage
+              }"
+            >
+              <template #markFlag="{ text }">
+                <PushpinFilled v-if="text === false" />
+                <PushpinFilled v-else style="color: #f37b6b" />
+              </template>
+              <template #operation="{ record }">
+                <a-space>
+                  <a-tag class="custom-tag" @click="detailBtn(record)"
+                    >详情</a-tag
+                  >
+                  <a-tag class="custom-tag" @click="editBtn(record)"
+                    >编辑</a-tag
+                  >
+                  <a-tag
+                    class="custom-tag custom-tag-waring"
+                    @click="deleteBtn(record)"
+                    >删除</a-tag
+                  >
+                </a-space>
+              </template>
+            </a-table>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="detail" :tab="tabTitle" v-if="tabVisible">
+          <div class="detail-box">
+            <div class="detail-title">
+              <img
+                alt=""
+                src="../../../assets/images/data-icon.png"
+                style="width: 70px; height: 70px"
+              />
+              <div class="name">
+                <p>
+                  {{ stuDetail.xpNo }}-{{ stuDetail.name }}-20{{
+                    stuDetail.grade
+                  }}届
+                </p>
+                <p>{{ stuDetail.university }}</p>
+              </div>
             </div>
-            <div class="detailed-info">
-              <a-tabs type="card" v-model:activeKey="detailActiveKey">
-                <a-tab-pane key="detailedInfo" tab="家庭情况">
-                  <a-table
-                    class="custom-table"
-                    :scroll="{ x: true }"
-                    :dataSource="alreadyStuList"
-                    :columns="familyColumns"
-                    :loading="familyLoading"
-                  />
-                </a-tab-pane>
-                <a-tab-pane key="2" tab="银行信息"
-                  >Content of Tab Pane 2</a-tab-pane
-                >
-                <a-tab-pane key="3" tab="申请信息"
-                  >Content of Tab Pane 3</a-tab-pane
-                >
-              </a-tabs>
+            <div class="detail-content">
+              <div class="basic-info">
+                <a-descriptions title="基本信息">
+                  <a-descriptions-item label="姓名">{{
+                    stuDetail.name
+                  }}</a-descriptions-item>
+                  <a-descriptions-item label="电话">{{
+                    stuDetail.phone
+                  }}</a-descriptions-item>
+                  <a-descriptions-item label="香港导师">
+                    {{ stuDetail.hkMentorName }}
+                  </a-descriptions-item>
+                  <a-descriptions-item label="高中">{{
+                    stuDetail.highSchool
+                  }}</a-descriptions-item>
+                  <a-descriptions-item label="生源地">{{
+                    stuDetail.highSchRegion
+                  }}</a-descriptions-item>
+                </a-descriptions>
+              </div>
+              <div class="detailed-info">
+                <a-tabs type="card" v-model:activeKey="detailActiveKey">
+                  <a-tab-pane key="detailedInfo" tab="家庭情况">
+                    <a-table
+                      class="custom-table"
+                      :scroll="{ x: true }"
+                      :dataSource="alreadyStuList"
+                      :columns="familyColumns"
+                      :loading="familyLoading"
+                    />
+                  </a-tab-pane>
+                  <a-tab-pane key="2" tab="银行信息"
+                    >Content of Tab Pane 2</a-tab-pane
+                  >
+                  <a-tab-pane key="3" tab="申请信息"
+                    >Content of Tab Pane 3</a-tab-pane
+                  >
+                </a-tabs>
+              </div>
             </div>
           </div>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
-    <a-modal
-      v-model:visible="visible"
-      title="编辑学生信息"
-      width="500px"
-      @ok="okBtn"
-    >
-      <a-form
-        ref="formRef"
-        :model="formState"
-        :rules="rules"
-        style="width: 100%"
+        </a-tab-pane>
+      </a-tabs>
+      <a-modal
+        v-model:visible="visible"
+        title="编辑学生信息"
+        width="500px"
+        @ok="okBtn"
       >
-        <a-form-item label="学生" name="name">
-          <a-input v-model:value="formState.name" disabled />
-        </a-form-item>
-        <a-form-item label="管理员类型" name="isSystem">
-          <a-radio-group v-model:value="formState.isSystem">
-            <a-radio value="0">非管理员</a-radio>
-            <a-radio value="1">普通管理员</a-radio>
-            <a-radio value="2">超级管理员</a-radio>
-          </a-radio-group>
-        </a-form-item>
-        <a-form-item label="是否设置为学生导师" name="isMentor">
-          <a-radio-group v-model:value="formState.isMentor">
-            <a-radio value="1">是</a-radio>
-            <a-radio value="0">否</a-radio>
-          </a-radio-group>
-        </a-form-item>
-        <a-form-item label="学生导师" name="stuMentorId">
-          <a-select
-            v-model:value="formState.stuMentorId"
-            placeholder="请选择学生导师"
-            showSearch
-            :filter-option="filterOptionStuMentor"
-          >
-            <a-select-option
-              v-for="item in stuMentors"
-              :key="item.key"
-              :label="item.name"
-              :value="item.name"
-              >{{ item.name }}</a-select-option
+        <a-form
+          ref="formRef"
+          :model="formState"
+          :rules="rules"
+          style="width: 100%"
+        >
+          <a-form-item label="学生" name="name">
+            <a-input v-model:value="formState.name" disabled />
+          </a-form-item>
+          <a-form-item label="管理员类型" name="isSystem">
+            <a-radio-group v-model:value="formState.isSystem">
+              <a-radio value="0">非管理员</a-radio>
+              <a-radio value="1">普通管理员</a-radio>
+              <a-radio value="2">超级管理员</a-radio>
+            </a-radio-group>
+          </a-form-item>
+          <a-form-item label="是否设置为学生导师" name="isMentor">
+            <a-radio-group v-model:value="formState.isMentor">
+              <a-radio value="1">是</a-radio>
+              <a-radio value="0">否</a-radio>
+            </a-radio-group>
+          </a-form-item>
+          <a-form-item label="学生导师" name="stuMentorId">
+            <a-select
+              v-model:value="formState.stuMentorId"
+              placeholder="请选择学生导师"
+              showSearch
+              :filter-option="filterOptionStuMentor"
             >
-          </a-select>
-        </a-form-item>
-        <a-form-item label="香港导师" name="hkMentorId">
-          <a-select
-            v-model:value="formState.hkMentorId"
-            placeholder="请选择香港导师"
-            showSearch
-            :filter-option="filterOptionHkMentor"
-          >
-            <a-select-option
-              v-for="item in hkMentors"
-              :key="item.key"
-              :label="item.name"
-              :value="item.name"
-              >{{ item.name }}</a-select-option
+              <a-select-option
+                v-for="item in stuMentors"
+                :key="item.key"
+                :label="item.name"
+                :value="item.name"
+                >{{ item.name }}</a-select-option
+              >
+            </a-select>
+          </a-form-item>
+          <a-form-item label="香港导师" name="hkMentorId">
+            <a-select
+              v-model:value="formState.hkMentorId"
+              placeholder="请选择香港导师"
+              showSearch
+              :filter-option="filterOptionHkMentor"
             >
-          </a-select>
-        </a-form-item>
-      </a-form>
-    </a-modal>
-  </div>
+              <a-select-option
+                v-for="item in hkMentors"
+                :key="item.key"
+                :label="item.name"
+                :value="item.name"
+                >{{ item.name }}</a-select-option
+              >
+            </a-select>
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </div>
+  </MainTemplate>
 </template>
 <script>
 import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue'
@@ -333,7 +337,11 @@ import {
   getHkMentors,
   getStuMentors
 } from '@/services/index'
+import MainTemplate from '@/components/mainTemplate/MainTemplate'
 export default defineComponent({
+  components: {
+    MainTemplate
+  },
   setup() {
     const state = reactive({
       activeKey: 'list',
