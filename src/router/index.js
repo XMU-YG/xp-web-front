@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainTemplate from '@/components/mainTemplate/MainTemplate'
-import AlreadyStu from '@/views/studentInfoManager/oldStu/AlreadyStu'
 import Login from '@/views/login/Login'
 import Home from '@/views/portal/home/Home'
 import AssistedStudent from '@/views/portal/assistedStudent/AssistedStudent'
@@ -8,8 +6,6 @@ import TutorServices from '@/views/portal/tutorServices/TutorServices'
 import PersonalHomePage from '@/views/portal/personalHomePage/PersonalHomePage'
 import VolunteerServices from '@/views/portal/volunteerServices/VolunteerServices'
 import AboutAssisted from '@/views/portal/aboutAssisted/AboutAssisted'
-import Article from '@/views/portal/article/Article'
-import Publish from '@/views/portal/article/components/Publish'
 import { routerList } from './menu'
 
 function floatRoute(data) {
@@ -70,16 +66,24 @@ const routes = [
     children: null
   },
   {
+    id: Math.random(),
     path: '/article',
-    name: 'article',
-    component: Article,
-    children: null
+    name: '/article',
+    component: () => import('../views/portal/article/Article.vue'),
+    meta: {
+      name: '文章帖子',
+      isLogin: false
+    }
   },
   {
-    path: '/publish',
-    name: 'publish',
-    component: Publish,
-    children: null
+    id: Math.random(),
+    path: '/article-publish/:id(.*)?',
+    name: '/article-publish',
+    component: () => import('../views/portal/article/components/Publish.vue'),
+    meta: {
+      name: '文章帖子',
+      isLogin: false
+    }
   },
   {
     path: '/personal-page',

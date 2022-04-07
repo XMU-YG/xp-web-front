@@ -68,8 +68,11 @@ export default {
     const router = useRouter()
 
     function publishBtn() {
-      console.log(router, 'router')
-      router.push('/publish')
+      let routeData = router.resolve({
+        path: '/article-publish/' + 'ididididsafsdafdsafdsafd',
+        query: { type: 'detail' }
+      })
+      window.open(routeData.href, '_blank')
     }
 
     return {
