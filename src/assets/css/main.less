@@ -2,7 +2,9 @@
 @import './zrm.less';
 @import './var.less';
 .ant-layout {
+  min-height: 100%;
   height: 100%;
+  overflow: auto;
   .ant-layout-header {
     background: #fff;
     .title{
@@ -288,6 +290,7 @@
   color: #606266;
 }
 .main-content-box{
+  min-height: calc(100% - 70px) !important;
   padding: 20px;
   background: #fff;
 }

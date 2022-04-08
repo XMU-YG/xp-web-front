@@ -15,7 +15,7 @@
           </div>
           <a-row :gutter="[10, 20]" style="width: 100%">
             <a-col :xxl="12" :xl="12" v-for="item in 20" :key="item">
-              <Card />
+              <Card @click="openDetail" />
             </a-col>
           </a-row>
           <div class="pagination">
@@ -67,9 +67,19 @@ export default {
 
     const router = useRouter()
 
+    //我要发布
     function publishBtn() {
       let routeData = router.resolve({
         path: '/article-publish/' + 'ididididsafsdafdsafdsafd',
+        query: { type: 'publish' }
+      })
+      window.open(routeData.href, '_blank')
+    }
+
+    //查看详情
+    function openDetail() {
+      let routeData = router.resolve({
+        path: '/article-detail/' + 'ididididsafsdafdsafdsafd',
         query: { type: 'detail' }
       })
       window.open(routeData.href, '_blank')
@@ -77,7 +87,8 @@ export default {
 
     return {
       ...toRefs(state),
-      publishBtn
+      publishBtn,
+      openDetail
     }
   }
 }

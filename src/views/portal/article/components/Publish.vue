@@ -11,7 +11,7 @@
         class="content"
         v-model:value="formData.content"
         placeholder="请输入正文"
-        :auto-size="{ minRows: 10, maxRows: 10 }"
+        :auto-size="{ minRows: 14, maxRows: 20 }"
       />
       <div class="img">
         <p>图片上传</p>
@@ -23,7 +23,6 @@
           ref="select"
           v-model:value="formData.tags"
           style="width: calc(100% - 70px)"
-          mode="multiple"
         >
           <a-select-option :value="1">成绩报告</a-select-option>
           <a-select-option :value="2">感谢信</a-select-option>
@@ -79,7 +78,7 @@ export default {
 
 <style scoped lang="less">
 .main-content-box {
-  height: 100%;
+  min-height: calc(100% - 70px) !important;
   .title.ant-input,
   .title.ant-input:hover,
   .title.ant-input:focus {

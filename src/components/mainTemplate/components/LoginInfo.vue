@@ -46,7 +46,7 @@ export default {
     }
 
     function returnPortal() {
-      router.push('/portal-home')
+      router.push('/home')
     }
     return {
       logOut,

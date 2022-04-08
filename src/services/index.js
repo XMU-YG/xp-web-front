@@ -64,7 +64,7 @@ export const getNoStuInfoService = async () => {
 }
 
 /**
- * 获取首页推荐图片
+ * 获取门户首页推荐图片
  * @returns Promise<{code: number, data: Array, msg: string}>
  */
 export const getIndexImages = async () => {
@@ -76,6 +76,7 @@ export const getIndexImages = async () => {
  * @returns Promise<{code: number, data: Array, msg: string}>
  */
 export const getIndexArticle = async () => {
+  console.log('xxxxxxxxxxx')
   return request.get('/api/article/recommend')
 }
 

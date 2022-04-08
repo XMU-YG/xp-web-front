@@ -4,7 +4,16 @@
       <a-layout-header>
         <div class="title-wrapper">
           <div class="title-box">
-            <h2 class="title">小平基金会管理系统</h2>
+            <div class="title">
+              <a-image
+                src="http://xpef.oss-cn-chengdu.aliyuncs.com/images/xplogo.png"
+                style="width: 35px"
+              />
+              <a-image
+                src="http://xpef.oss-cn-chengdu.aliyuncs.com/images/xpef2.png"
+                style="height: 40px"
+              />
+            </div>
             <div class="login-wrap">
               <div class="header-imgage">
                 <my-icon type="icon-touxiang" class="my-icon" />
@@ -32,9 +41,9 @@
                         >
                       </a-menu-item>
                       <a-menu-item key="logout">
-                        <a-button type="link" class="link-btn" @click="logOut"
-                          登出</a-button
-                        >
+                        <a-button type="link" class="link-btn" @click="logOut">
+                          登出
+                        </a-button>
                       </a-menu-item>
                     </a-menu>
                   </template>
@@ -47,15 +56,15 @@
           </div>
           <div class="menu">
             <a-menu
-              v-model:selectedKeys="current"
+              v-model:selectedKeys="selectedKeys"
               mode="horizontal"
               @select="select"
             >
-              <a-menu-item key="portal-home"> 首页 </a-menu-item>
-              <a-menu-item key="tutor-service"> 导师服务 </a-menu-item>
-              <a-menu-item key="volunteer-service"> 志愿者服务 </a-menu-item>
-              <a-menu-item key="article"> 文章帖子 </a-menu-item>
-              <a-menu-item key="personal-page"> 个人主页 </a-menu-item>
+              <a-menu-item key="/"> 首页 </a-menu-item>
+              <a-menu-item key="/tutor-service"> 导师服务 </a-menu-item>
+              <a-menu-item key="/volunteer-service"> 志愿者服务 </a-menu-item>
+              <a-menu-item key="/article"> 文章帖子 </a-menu-item>
+              <a-menu-item key="/personal-page"> 个人主页 </a-menu-item>
             </a-menu>
           </div>
         </div>
@@ -66,20 +75,34 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getMenuList } from '@/services'
 export default {
   setup() {
     const router = useRouter()
     const state = reactive({
-      current: ['mail']
+      selectedKeys: ['/home'],
+      menuList: []
     })
 
-    function select(e) {
-      let url = `/${e.key}`
-      router.push(url)
+    onMounted(() => {
+      getMenu()
+    })
+
+    async function getMenu() {
+      try {
+        state.menuList = await getMenuList()
+      } catch (e) {
+        throw Error(e)
+      }
     }
 
+    function select(e) {
+      console.log(state.selectedKeys, 'selectedKeys')
+      let url = `${e.key}`
+      router.push(url)
+    }
     function returnSystem() {
       router.push('/alreadyStu-manager')
     }
@@ -100,6 +123,7 @@ export default {
 
 <style scoped lang="less">
 .wrapper {
+  height: 100%;
   margin: 0 auto;
   /deep/ header.ant-layout-header {
     height: 107px;
@@ -136,9 +160,7 @@ export default {
         justify-content: space-between;
         color: #fff;
         .title {
-          color: #fff;
-          font-size: 20px;
-          font-weight: bolder;
+          margin-bottom: 10px;
         }
         .login-wrap {
           display: flex;
@@ -188,7 +210,7 @@ export default {
     }
   }
   /deep/ main.ant-layout-content {
-    height: 100%;
+    min-height: 100%;
     width: 1200px;
     margin: 0 auto;
   }

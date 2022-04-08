@@ -4,21 +4,25 @@
       <div class="img">
         <a-space>
           <img src="../../../../assets/images/girl2.png" alt="女生图片" />
-          <span>张桑</span>
-          <span>贵州大学</span>
-          <span>网络工程</span>
+          <span>{{ data.writer }}</span>
+          <span>{{ data.writerUniversity }}</span>
+          <span>{{ data.writerMajor }}</span>
         </a-space>
       </div>
-      <span>2022-01-23 19:55:55</span>
+      <span>{{
+        data.gmtCreate
+          ? moment(data.gmtCreate).format('YYYY-MM-DD HH:mm:ss')
+          : ''
+      }}</span>
     </div>
     <div class="content">
-      <div class="title">文章标题文章标题文章标题文章标题</div>
+      <div class="title">{{ data.mark }}</div>
       <div class="bottom">
         <div class="left">
           <a-space>
-            <span><EyeOutlined class="icon" />1232</span>
-            <span><MessageOutlined class="icon" />32</span>
-            <span><LikeOutlined class="icon" />3333</span>
+            <span><EyeOutlined class="icon" />{{ data.browse }}</span>
+            <span><MessageOutlined class="icon" />{{ data.topicNum }}</span>
+            <span><LikeOutlined class="icon" />{{ data.praiseNum }}</span>
           </a-space>
         </div>
         <div class="right">
@@ -30,13 +34,22 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs } from 'vue'
+import moment from 'moment'
 export default {
-  setup() {
+  props: {
+    data: Object
+  },
+  setup(props) {
     const state = reactive({})
 
+    onMounted(() => {
+      console.log(props.data, 'data')
+    })
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      moment
     }
   }
 }

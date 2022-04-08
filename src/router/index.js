@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainTemplate from '@/components/mainTemplate/MainTemplate'
-import AlreadyStu from '@/views/studentInfoManager/oldStu/AlreadyStu'
 import Login from '@/views/login/Login'
 import Home from '@/views/portal/home/Home'
 import AssistedStudent from '@/views/portal/assistedStudent/AssistedStudent'
@@ -10,12 +8,6 @@ import VolunteerServices from '@/views/portal/volunteerServices/VolunteerService
 import AboutAssisted from '@/views/portal/aboutAssisted/AboutAssisted'
 import Article from '@/views/portal/article/Article'
 import Publish from '@/views/portal/article/components/Publish'
-import Home from '@/views/portal/home/Home'
-import AssistedStudent from '@/views/portal/assistedStudent/AssistedStudent'
-import TutorServices from '@/views/portal/tutorServices/TutorServices'
-import PersonalHomePage from '@/views/portal/personalHomePage/PersonalHomePage'
-import VolunteerServices from '@/views/portal/volunteerServices/VolunteerServices'
-import AboutAssisted from '@/views/portal/aboutAssisted/AboutAssisted'
 import { routerList } from './menu'
 
 function floatRoute(data) {
@@ -35,20 +27,27 @@ routeBakList = routeBakList.filter(item => item.component)
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home,
-    children: null
+    name: '/',
+    component: () => import('..//views/portal/home/Home.vue'),
+    meta: {
+      name: '首页',
+      isLogin: false
+    }
+  },
+  {
+    id: Math.random(),
+    path: '/home',
+    name: '/home',
+    component: () => import('..//views/portal/home/Home.vue'),
+    meta: {
+      name: '首页',
+      isLogin: false
+    }
   },
   {
     path: '/login',
     name: 'login',
     component: Login,
-    children: null
-  },
-  {
-    path: '/portal-home',
-    name: 'home',
-    component: Home,
     children: null
   },
   {
@@ -80,6 +79,17 @@ const routes = [
     path: '/article',
     name: '/article',
     component: () => import('../views/portal/article/Article.vue'),
+    meta: {
+      name: '文章帖子',
+      isLogin: false
+    }
+  },
+  {
+    id: Math.random(),
+    path: '/article-detail/:id(.*)?',
+    name: '/article-detail',
+    component: () =>
+      import('../views/portal/article/components/ArticleDetail.vue'),
     meta: {
       name: '文章帖子',
       isLogin: false

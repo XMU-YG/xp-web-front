@@ -9,6 +9,11 @@
         size="middle"
         :pagination="false"
       >
+        <template #name="{ record }">
+          <a style="text-decoration: underline" @click="applyBtn(record)">{{
+            record.name
+          }}</a>
+        </template>
         <template #operation="{ record }">
           <a-space>
             <a
@@ -61,6 +66,51 @@
         </a-form-item>
       </a-form>
     </a-modal>
+    <a-modal
+      width="800px"
+      v-model:visible="applyVisible"
+      title="申请表信息"
+      :footer="null"
+    >
+      <div class="apply-box">
+        <div class="item">
+          <span class="label">姓名：</span>
+          <span class="content">张三</span>
+        </div>
+        <div class="item">
+          <span class="label">家庭总人数：</span>
+          <span class="content">7</span>
+        </div>
+        <div class="item">
+          <span class="label">就业总人数：</span>
+          <span class="content">5</span>
+        </div>
+        <div class="item">
+          <span class="label">赡养人数：</span>
+          <span class="content">5</span>
+        </div>
+        <div class="item">
+          <span class="label">就学人数：</span>
+          <span class="content">3</span>
+        </div>
+        <div class="item">
+          <span class="label">欠债金额：</span>
+          <span class="content">123123</span>
+        </div>
+        <div class="item">
+          <span class="label">欠债原因：</span>
+          <span class="content">张三</span>
+        </div>
+        <div class="item">
+          <span class="label">是否申请助学贷款：</span>
+          <span class="content">是</span>
+        </div>
+        <div class="item">
+          <span class="label">申请原因：</span>
+          <span class="content">张三</span>
+        </div>
+      </div>
+    </a-modal>
   </portalTemplate>
 </template>
 
@@ -74,12 +124,14 @@ export default {
   setup() {
     const state = reactive({
       visible: false,
+      applyVisible: false,
       currentObj: {},
       columns: [
         {
           title: '姓名',
           dataIndex: 'name',
-          key: 'name'
+          key: 'name',
+          slots: { customRender: 'name' }
         },
         {
           title: '高中学校',
@@ -195,6 +247,12 @@ export default {
       state.currentObj = record
     }
 
+    //查看申请信息
+    function applyBtn(record) {
+      state.applyVisible = true
+      state.currentObj = record
+    }
+
     const handleChange = ({ file, fileList }) => {
       if (file.status !== 'uploading') {
         console.log(file, fileList)
@@ -216,6 +274,7 @@ export default {
     return {
       ...toRefs(state),
       feedback,
+      applyBtn,
       onSubmit,
       formRef,
       handleChange
@@ -229,5 +288,10 @@ export default {
   width: 95px;
   text-align: right;
   display: inline-block;
+}
+.apply-box {
+  .item {
+    margin-bottom: 10px;
+  }
 }
 </style>

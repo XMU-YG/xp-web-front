@@ -20,7 +20,7 @@
       width="800px"
       v-model:visible="visible"
       title="已提交成绩报告"
-      @ok="handleOk"
+      :footer="null"
     >
       <a-table
         :columns="columnsReport"
@@ -29,6 +29,11 @@
         size="middle"
         :pagination="false"
       >
+        <template #operation="{ record }">
+          <a @click="report(record)" style="text-decoration: underline"
+            >成绩报告</a
+          >
+        </template>
       </a-table>
     </a-modal>
   </portalTemplate>
@@ -37,11 +42,13 @@
 <script>
 import { reactive, toRefs } from 'vue'
 import portalTemplate from '@/components/mainTemplate/portal/portalTemplate'
+import { useRouter } from 'vue-router'
 export default {
   components: {
     portalTemplate
   },
   setup() {
+    const router = useRouter()
     const state = reactive({
       visible: false,
       currentObj: {},
@@ -60,6 +67,14 @@ export default {
           title: '上传时间',
           dataIndex: 'tel',
           key: 'tel'
+        },
+        {
+          title: '操作',
+          dataIndex: 'operation',
+          key: 'operation',
+          width: '140px',
+          fixed: 'right',
+          slots: { customRender: 'operation' }
         }
       ],
       columns: [
@@ -129,14 +144,25 @@ export default {
       ]
     })
 
+    //查看成绩报告按钮
     function lookReport(record) {
       state.visible = true
       state.currentObj = record
     }
 
+    //成绩报告按钮
+    function report() {
+      let routeData = router.resolve({
+        path: '/article-detail/' + 'ididididsafsdafdsafdsafd',
+        query: { type: 'detail' }
+      })
+      window.open(routeData.href, '_blank')
+    }
+
     return {
       ...toRefs(state),
-      lookReport
+      lookReport,
+      report
     }
   }
 }

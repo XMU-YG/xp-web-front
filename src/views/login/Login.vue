@@ -110,7 +110,7 @@ export default defineComponent({
         type: state.formState.type
       }
       console.log(params, 'params')
-      router.push('/portal-home')
+      router.push('/home')
     }
 
     return {

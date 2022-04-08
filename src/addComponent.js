@@ -32,6 +32,7 @@ import {
   Radio,
   Steps,
   Carousel,
+  Image,
   Pagination
 } from 'ant-design-vue'
 import * as icons from '@ant-design/icons-vue'
@@ -76,6 +77,7 @@ export default function (vue) {
   vue.use(Steps)
   vue.use(Pagination)
   vue.use(Carousel)
+  vue.use(Image)
   vue.component('MyIcon', myIcon)
   Object.keys(icons).forEach(item => {
     vue.component(item, icons[item])
