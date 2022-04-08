@@ -27,6 +27,11 @@
                           >后台管理</a-button
                         >
                       </a-menu-item>
+                      <a-menu-item key="resetPwd">
+                        <a-button type="link" class="link-btn" @click="resetPwd"
+                          >修改密码</a-button
+                        >
+                      </a-menu-item>
                       <a-menu-item key="logout">
                         <a-button type="link" class="link-btn" @click="logOut"
                           >登出</a-button
