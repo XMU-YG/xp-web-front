@@ -64,19 +64,39 @@ export default {
       ],
       columns: [
         {
-          title: '小平编号',
-          dataIndex: 'number',
-          key: 'number'
-        },
-        {
           title: '姓名',
           dataIndex: 'name',
           key: 'name'
         },
         {
+          title: '邮箱',
+          dataIndex: 'email',
+          key: 'email'
+        },
+        {
           title: '联系电话',
-          dataIndex: 'tel',
-          key: 'tel'
+          dataIndex: 'phone',
+          key: 'phone'
+        },
+        {
+          title: '性别',
+          dataIndex: 'sex',
+          key: 'sex'
+        },
+        {
+          title: '年级',
+          dataIndex: 'grade',
+          key: 'grade'
+        },
+        {
+          title: '大学',
+          dataIndex: 'university',
+          key: 'university'
+        },
+        {
+          title: '专业',
+          dataIndex: 'major',
+          key: 'major'
         },
         {
           title: '操作',

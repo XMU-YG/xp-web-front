@@ -37,8 +37,7 @@
           v-model:value="formData.isLook"
           style="width: calc(100% - 70px)"
         >
-          <a-select-option :value="1">仅自己可见</a-select-option>
-          <a-select-option :value="2">导师可见</a-select-option>
+          <a-select-option :value="2">仅导师可见</a-select-option>
           <a-select-option :value="3">所有人可见</a-select-option>
         </a-select>
       </div>

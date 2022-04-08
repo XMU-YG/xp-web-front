@@ -48,9 +48,6 @@
         <a-form-item label="家访志愿者">
           <a-input v-model:value="formState.name" />
         </a-form-item>
-        <a-form-item label="家访志愿者">
-          <a-input v-model:value="formState.name" />
-        </a-form-item>
         <a-form-item label="上传家访资料">
           <a-upload
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -80,24 +77,44 @@ export default {
       currentObj: {},
       columns: [
         {
-          title: '小平编号',
-          dataIndex: 'number',
-          key: 'number'
-        },
-        {
           title: '姓名',
           dataIndex: 'name',
           key: 'name'
         },
         {
+          title: '高中学校',
+          dataIndex: 'highSchool',
+          key: 'highSchool'
+        },
+        {
           title: '联系电话',
-          dataIndex: 'tel',
-          key: 'tel'
+          dataIndex: 'phone',
+          key: 'phone'
+        },
+        {
+          title: 'QQ',
+          dataIndex: 'qq',
+          key: 'qq'
+        },
+        {
+          title: '微信',
+          dataIndex: 'weixin',
+          key: 'weixin'
+        },
+        {
+          title: '性别',
+          dataIndex: 'sex',
+          key: 'sex'
         },
         {
           title: '家庭地址',
-          dataIndex: 'tel',
-          key: 'tel'
+          dataIndex: 'living',
+          key: 'living'
+        },
+        {
+          title: '申请状态',
+          dataIndex: 'applyStatus',
+          key: 'applyStatus'
         },
         {
           title: '',

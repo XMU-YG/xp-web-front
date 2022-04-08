@@ -23,12 +23,17 @@
                           type="link"
                           class="link-btn"
                           @click="returnSystem"
-                          >返回系统后台</a-button
+                          >后台管理</a-button
+                        >
+                      </a-menu-item>
+                      <a-menu-item key="resetPwd">
+                        <a-button type="link" class="link-btn" @click="resetPwd"
+                          >修改密码</a-button
                         >
                       </a-menu-item>
                       <a-menu-item key="logout">
                         <a-button type="link" class="link-btn" @click="logOut"
-                          >退出</a-button
+                          登出</a-button
                         >
                       </a-menu-item>
                     </a-menu>
@@ -47,10 +52,8 @@
               @select="select"
             >
               <a-menu-item key="portal-home"> 首页 </a-menu-item>
-              <a-menu-item key="assisted-student"> 受助学生 </a-menu-item>
               <a-menu-item key="tutor-service"> 导师服务 </a-menu-item>
               <a-menu-item key="volunteer-service"> 志愿者服务 </a-menu-item>
-              <a-menu-item key="about-assisted"> 受助相关 </a-menu-item>
               <a-menu-item key="article"> 文章帖子 </a-menu-item>
               <a-menu-item key="personal-page"> 个人主页 </a-menu-item>
             </a-menu>
