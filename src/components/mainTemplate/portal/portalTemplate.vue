@@ -71,6 +71,14 @@
       </a-layout-header>
       <a-layout-content><slot></slot></a-layout-content>
     </a-layout>
+    <a-modal
+      width="600px"
+      v-model:visible="visible"
+      title="修改密码"
+      :footer="null"
+    >
+      <ResetPwd />
+    </a-modal>
   </div>
 </template>
 
@@ -78,12 +86,17 @@
 import { reactive, toRefs, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getMenuList } from '@/services'
+import ResetPwd from '@/components/mainTemplate/portal/ResetPwd'
 export default {
+  components: {
+    ResetPwd
+  },
   setup() {
     const router = useRouter()
     const state = reactive({
       selectedKeys: ['/home'],
-      menuList: []
+      menuList: [],
+      visible: false
     })
 
     onMounted(() => {
@@ -111,11 +124,16 @@ export default {
       router.push('/login')
     }
 
+    function resetPwd() {
+      state.visible = true
+    }
+
     return {
       ...toRefs(state),
       select,
       returnSystem,
-      logOut
+      logOut,
+      resetPwd
     }
   }
 }
