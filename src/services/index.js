@@ -53,7 +53,7 @@ export const getUniversityNames = async () => {
  * @returns Promise<{code: number, msg: string}>
  */
 export const getHighSchoolNames = async () => {
-  return request.get('/api/user/student/highSchNames')
+  return request.get('/api/user/school/list')
 }
 /**
  * 预受助学生信息列表服务
@@ -151,4 +151,20 @@ export const createArticle = async params => {
  */
 export const uploadFile = async params => {
   return request.post('/api/file/upload', params)
+}
+
+/**
+ * 获取管理员
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const getSystem = async () => {
+  return request.get('/api/user/managers')
+}
+
+/**
+ * 获取志愿者
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const getVolunteer = async () => {
+  return request.get('/api/volunteer/list')
 }

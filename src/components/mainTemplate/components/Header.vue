@@ -1,6 +1,6 @@
 <template>
   <header class="header-wrap">
-    <h2 class="title">小平基金会数据管理平台</h2>
+    <h2 class="title">小平基金会数据管理后台</h2>
     <LoginInfo />
   </header>
 </template>

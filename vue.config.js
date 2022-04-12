@@ -8,7 +8,8 @@ module.exports = {
     open: true,  //启动项目时是否自动在浏览器打开
     proxy: {
       '/api': {
-        target: 'http://39.107.120.5:8088',
+        target: 'http://127.0.0.1:8088',
+      //  target: 'http://39.107.120.5:8088',
         ws: true,
         changeOrigin: true,
         pathRewrite: {
