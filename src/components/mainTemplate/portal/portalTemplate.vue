@@ -76,6 +76,7 @@
       v-model:visible="visible"
       title="修改密码"
       :footer="null"
+      :destroyOnClose="true"
     >
       <ResetPwd />
     </a-modal>

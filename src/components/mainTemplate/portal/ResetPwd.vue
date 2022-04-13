@@ -1,13 +1,6 @@
 <template>
-  <a-form
-    ref="formRef"
-    :model="formState"
-    :rules="rules"
-    v-bind="layout"
-    @finish="handleFinish"
-    @finishFailed="handleFinishFailed"
-  >
-    <a-form-item has-feedback label="邮箱" name="mail">
+  <a-form ref="formRef" :model="formState" :rules="rules">
+    <a-form-item label="邮箱" name="mail">
       <a-input
         style="width: 430px"
         v-model:value="formState.mail"
@@ -15,7 +8,7 @@
         autocomplete="off"
       />
     </a-form-item>
-    <a-form-item has-feedback label="姓名" name="name">
+    <a-form-item label="姓名" name="name">
       <a-input
         style="width: 430px"
         v-model:value="formState.name"
@@ -23,7 +16,7 @@
         autocomplete="off"
       />
     </a-form-item>
-    <a-form-item has-feedback label="旧密码" name="oldPass">
+    <a-form-item label="旧密码" name="oldPass">
       <a-input
         style="width: 430px"
         v-model:value="formState.oldPass"
@@ -31,7 +24,7 @@
         autocomplete="off"
       />
     </a-form-item>
-    <a-form-item has-feedback label="新密码" name="newPass">
+    <a-form-item label="新密码" name="newPass">
       <a-input
         style="width: 430px"
         v-model:value="formState.newPass"
@@ -39,7 +32,7 @@
         autocomplete="off"
       />
     </a-form-item>
-    <a-form-item has-feedback label="确认新密码" name="checkPass">
+    <a-form-item label="确认新密码" name="checkPass">
       <a-input
         style="width: 430px"
         v-model:value="formState.checkPass"
@@ -47,7 +40,7 @@
         autocomplete="off"
       />
     </a-form-item>
-    <a-form-item has-feedback label="验证码" name="code">
+    <a-form-item label="验证码" name="code">
       <a-input
         style="width: 230px"
         v-model:value="formState.code"
@@ -65,6 +58,7 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs, ref } from 'vue'
+import { message } from 'ant-design-vue'
 export default defineComponent({
   setup() {
     const formRef = ref()
@@ -116,6 +110,11 @@ export default defineComponent({
             message: '确认密码不能为空',
             type: 'string',
             trigger: ['blur', 'change']
+          },
+          {
+            type: 'string',
+            trigger: ['blur', 'change'],
+            validator: validateRules
           }
         ],
         code: [
@@ -129,72 +128,41 @@ export default defineComponent({
       }
     })
 
-    let checkAge = async (rule, value) => {
-      if (!value) {
-        return Promise.reject('Please input the age')
-      }
-
-      if (!Number.isInteger(value)) {
-        return Promise.reject('Please input digits')
-      } else {
-        if (value < 18) {
-          return Promise.reject('Age must be greater than 18')
-        } else {
-          return Promise.resolve()
-        }
-      }
-    }
-
-    let validatePass = async (rule, value) => {
-      if (value === '') {
-        return Promise.reject('Please input the password')
-      } else {
-        if (state.formState.checkPass !== '') {
-          formRef.value.validateFields('checkPass')
-        }
-
+    //手机号码/联系电话自定义校验
+    function validateRules(rule, value) {
+      if (!state.formState.newPass || state.formState.newPass === value) {
         return Promise.resolve()
-      }
-    }
-
-    let validatePass2 = async (rule, value) => {
-      if (value === '') {
-        return Promise.reject('Please input the password again')
-      } else if (value !== state.formState.pass) {
-        return Promise.reject('Two inputs donmatch!')
       } else {
-        return Promise.resolve()
-      }
-    }
-    const layout = {
-      labelCol: {
-        span: 4
-      },
-      wrapperCol: {
-        span: 14
+        return Promise.reject('确认密码与新密码不一致')
       }
     }
 
-    const handleFinish = values => {
-      console.log(values, state.formState)
-    }
-
-    const handleFinishFailed = errors => {
-      console.log(errors)
-    }
-
-    const resetForm = () => {
-      formRef.value.resetFields()
+    const submit = () => {
+      formRef.value
+        .validate()
+        .then(() => {
+          const params = {
+            ...state.formState
+          }
+          console.log(params, 'params')
+        })
+        .catch(() => {
+          message.warning('请按规则完善字段')
+        })
     }
 
     return {
       ...toRefs(state),
       formRef,
-      layout,
-      handleFinishFailed,
-      handleFinish,
-      resetForm
+      submit
     }
   }
 })
 </script>
+<style scoped>
+/deep/ label.ant-form-item-required {
+  display: inline-block;
+  width: 95px;
+  text-align: right;
+}
+</style>
