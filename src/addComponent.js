@@ -5,6 +5,7 @@ import {
   Row,
   Col,
   Input,
+  InputNumber,
   Menu,
   Dropdown,
   Badge,
@@ -58,6 +59,7 @@ export default function (vue) {
   vue.use(Row)
   vue.use(Col)
   vue.use(Input)
+  vue.use(InputNumber)
   vue.use(Menu)
   vue.use(Dropdown)
   vue.use(Badge)

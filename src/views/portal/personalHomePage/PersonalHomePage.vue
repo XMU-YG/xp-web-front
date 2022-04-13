@@ -52,7 +52,7 @@
                     allow-clear
                     v-model:value="formData.name"
                     :placeholder="isDetail ? '-' : '请输入'"
-                    :disabled="isDetail"
+                    disabled="true"
                   />
                 </a-form-item>
               </a-col>
@@ -72,7 +72,7 @@
                     allow-clear
                     v-model:value="formData.mailbox"
                     :placeholder="isDetail ? '-' : '请输入'"
-                    :disabled="isDetail"
+                    disabled="true"
                   />
                 </a-form-item>
               </a-col>
@@ -88,10 +88,8 @@
               </a-col>
               <a-col :span="12">
                 <a-form-item label="生源地" name="ofStudent">
-                  <a-input
-                    allow-clear
-                    v-model:value="formData.ofStudent"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                  <SelectTree
+                    v-model:treeValue="formData.ofStudent"
                     :disabled="isDetail"
                   />
                 </a-form-item>
@@ -138,10 +136,8 @@
               </a-col>
               <a-col :span="12">
                 <a-form-item label="现居住地" name="address">
-                  <a-input
-                    allow-clear
-                    v-model:value="formData.address"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                  <SelectTree
+                    v-model:treeValue="formData.address"
                     :disabled="isDetail"
                   />
                 </a-form-item>
@@ -152,7 +148,7 @@
                     allow-clear
                     v-model:value="formData.studentTutor"
                     :placeholder="isDetail ? '-' : '请输入'"
-                    :disabled="isDetail"
+                    disabled="true"
                   />
                 </a-form-item>
               </a-col>
@@ -162,7 +158,7 @@
                     allow-clear
                     v-model:value="formData.hkTutor"
                     :placeholder="isDetail ? '-' : '请输入'"
-                    :disabled="isDetail"
+                    disabled="true"
                   />
                 </a-form-item>
               </a-col>
@@ -182,16 +178,14 @@
                     allow-clear
                     v-model:value="formData.highSchool"
                     :placeholder="isDetail ? '-' : '请输入'"
-                    :disabled="isDetail"
+                    disabled="true"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
                 <a-form-item label="高中学校地址" name="highSchoolAddress">
-                  <a-input
-                    allow-clear
-                    v-model:value="formData.highSchoolAddress"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                  <SelectTree
+                    v-model:treeValue="formData.highSchoolAddress"
                     :disabled="isDetail"
                   />
                 </a-form-item>
@@ -218,11 +212,14 @@
               </a-col>
               <a-col :span="12">
                 <a-form-item label="学年制" name="scholastic">
-                  <a-input
-                    allow-clear
-                    v-model:value="formData.scholastic"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                  <a-input-number
+                    style="width: 100%"
                     :disabled="isDetail"
+                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.scholastic"
+                    :min="0"
+                    :max="10"
+                    :step="1"
                   />
                 </a-form-item>
               </a-col>
@@ -258,10 +255,8 @@
               </a-col>
               <a-col :span="12">
                 <a-form-item label="开户行地址" name="acountAddress">
-                  <a-input
-                    allow-clear
-                    v-model:value="formData.acountAddress"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                  <SelectTree
+                    v-model:treeValue="formData.acountAddress"
                     :disabled="isDetail"
                   />
                 </a-form-item>
@@ -288,10 +283,12 @@
 <script>
 import { reactive, toRefs, ref } from 'vue'
 import portalTemplate from '@/components/mainTemplate/portal/portalTemplate'
+import SelectTree from './components/SelectTree'
 import { message } from 'ant-design-vue'
 export default {
   components: {
-    portalTemplate
+    portalTemplate,
+    SelectTree
   },
   setup() {
     const state = reactive({
@@ -322,22 +319,103 @@ export default {
         bank: null,
         acountAddress: null
       },
-      rules: {
-        name: [
-          {
-            require: true,
-            type: 'string',
-            message: '名字不能为空'
-          }
-        ],
-        idNumber: [
-          {
-            require: true,
-            type: 'string',
-            message: '身份证号不能为空'
-          }
-        ]
-      }
+      rules: {},
+      tree: [
+        {
+          id: 'dfdsagfdsagfasdg',
+          name: '河南省',
+          label: '河南省',
+          value: 'dfdsagfdsagfasdg',
+          title: '河南省',
+          type: 'ofStudent',
+          children: [
+            {
+              id: 'agadfgdfg',
+              name: '驻马店市',
+              label: '驻马店市',
+              value: 'agadfgdfg',
+              title: '驻马店市',
+              type: 'ofStudent',
+              children: [
+                {
+                  id: 'dgfdfsgfdgf',
+                  name: '平舆县',
+                  label: '平舆县',
+                  value: 'dgfdfsgfdgf',
+                  title: '平舆县',
+                  type: 'ofStudent',
+                  children: null
+                },
+                {
+                  id: 'wetrewvcdbv',
+                  name: '新蔡县',
+                  label: '新蔡县',
+                  value: 'wetrewvcdbv',
+                  title: '新蔡县',
+                  type: 'ofStudent',
+                  children: null
+                }
+              ]
+            },
+            {
+              id: 'adfsfdsa',
+              name: '漯河市afdsf',
+              label: '漯河市afdsf',
+              value: 'adfsfdsa',
+              title: '漯河市afdsf',
+              type: 'ofStudent',
+              children: [
+                {
+                  id: 'ewtrgewtrge',
+                  name: '市辖区',
+                  label: '市辖区',
+                  value: 'ewtrgewtrge',
+                  title: '市辖区',
+                  type: 'ofStudent',
+                  children: null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'sgfsgfdwet4ewt',
+          name: '贵州省',
+          label: '贵州省',
+          value: 'sgfsgfdwet4ewt',
+          title: '贵州省',
+          type: 'ofStudent',
+          children: [
+            {
+              id: 'wrytreytr',
+              name: '贵阳市',
+              label: '贵阳市',
+              title: '贵阳市',
+              type: 'ofStudent',
+              value: 'wrytreytr'
+            },
+            {
+              id: 'yuoiugjkmjhg',
+              name: '安顺市',
+              label: '安顺市',
+              value: 'yuoiugjkmjhg',
+              type: 'ofStudent',
+              title: '安顺市',
+              children: [
+                {
+                  id: 'hkdgjhnghcnj',
+                  name: '关岭县',
+                  label: '关岭县',
+                  value: 'hkdgjhnghcnj',
+                  type: 'ofStudent',
+                  title: '关岭县',
+                  children: null
+                }
+              ]
+            }
+          ]
+        }
+      ]
     })
 
     function editBtn() {
@@ -352,7 +430,10 @@ export default {
     function submitBtn() {
       myForm.value
         .validate()
-        .then(() => {})
+        .then(() => {
+          const params = { ...state.formData }
+          console.log(params, 'params')
+        })
         .catch(() => {
           message.warning('请按规则完善字段')
         })

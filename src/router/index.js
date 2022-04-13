@@ -1,12 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/login/Login'
-import Home from '@/views/portal/home/Home'
 import TutorServices from '@/views/portal/tutorServices/TutorServices'
 import PersonalHomePage from '@/views/portal/personalHomePage/PersonalHomePage'
 import VolunteerServices from '@/views/portal/volunteerServices/VolunteerServices'
-import AboutAssisted from '@/views/portal/aboutAssisted/AboutAssisted'
-import Article from '@/views/portal/article/Article'
-import Publish from '@/views/portal/article/components/Publish'
 import { routerList } from './menu'
 
 function floatRoute(data) {
@@ -53,12 +49,6 @@ const routes = [
     path: '/volunteer-service',
     name: 'volunteerServices',
     component: VolunteerServices,
-    children: null
-  },
-  {
-    path: '/about-assisted',
-    name: 'aboutAssisted',
-    component: AboutAssisted,
     children: null
   },
   {

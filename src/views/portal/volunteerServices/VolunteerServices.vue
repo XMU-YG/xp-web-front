@@ -29,31 +29,35 @@
       </a-table>
     </div>
     <a-modal
-      width="800px"
+      width="600px"
       v-model:visible="visible"
       title="家访反馈"
+      okText="保存"
       @ok="onSubmit"
     >
-      <a-form ref="formRef" :model="formState">
-        <a-form-item label="学生姓名">
-          <a-input v-model:value="formState.name" />
-        </a-form-item>
-        <a-form-item label="高中学校">
-          <a-input v-model:value="formState.name" />
-        </a-form-item>
-        <a-form-item label="情况是否属实">
-          <a-select v-model:value="formState.name">
+      <a-form ref="formRef" :model="formState" :rules="rules">
+        <div class="item-box">
+          <span class="label">学生姓名:</span>
+          <span class="content">张三</span>
+        </div>
+        <div class="item-box">
+          <span class="label">高中学校:</span>
+          <span class="content">xxxx中学</span>
+        </div>
+        <a-form-item label="情况是否属实" name="isTrue">
+          <a-select v-model:value="formState.isTrue">
             <a-select-option :value="1">是</a-select-option>
             <a-select-option :value="2">否</a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="志愿者反馈">
-          <a-textarea v-model:value="formState.name" />
+        <a-form-item label="志愿者反馈" name="feedback">
+          <a-textarea v-model:value="formState.feedback" />
         </a-form-item>
-        <a-form-item label="家访志愿者">
-          <a-input v-model:value="formState.name" />
-        </a-form-item>
-        <a-form-item label="上传家访资料">
+        <div class="item-box">
+          <span class="label">家访志愿者:</span>
+          <span class="content">李四</span>
+        </div>
+        <a-form-item label="家访资料" name="fileList">
           <a-upload
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             v-model:file-list="formState.fileList"
@@ -67,7 +71,7 @@
       </a-form>
     </a-modal>
     <a-modal
-      width="800px"
+      width="600px"
       v-model:visible="applyVisible"
       title="申请表信息"
       :footer="null"
@@ -117,6 +121,7 @@
 <script>
 import { reactive, toRefs, ref } from 'vue'
 import portalTemplate from '@/components/mainTemplate/portal/portalTemplate'
+import { message } from 'ant-design-vue'
 export default {
   components: {
     portalTemplate
@@ -136,37 +141,86 @@ export default {
         {
           title: '高中学校',
           dataIndex: 'highSchool',
-          key: 'highSchool'
+          key: 'highSchool',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '联系电话',
           dataIndex: 'phone',
-          key: 'phone'
+          key: 'phone',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: 'QQ',
           dataIndex: 'qq',
-          key: 'qq'
+          key: 'qq',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '微信',
           dataIndex: 'weixin',
-          key: 'weixin'
+          key: 'weixin',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '性别',
           dataIndex: 'sex',
-          key: 'sex'
+          key: 'sex',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '家庭地址',
           dataIndex: 'living',
-          key: 'living'
+          key: 'living',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '申请状态',
           dataIndex: 'applyStatus',
-          key: 'applyStatus'
+          key: 'applyStatus',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '',
@@ -198,43 +252,29 @@ export default {
         }
       ],
       formState: {
-        name: '',
-        fileList: [
-          {
-            uid: '1',
-            name: 'xxx.png',
-            status: 'done',
-            response: 'Server Error 500',
-            // custom error message to show
-            url: 'http://www.baidu.com/xxx.png'
-          },
-          {
-            uid: '2',
-            name: 'yyy.png',
-            status: 'done',
-            url: 'http://www.baidu.com/yyy.png'
-          },
-          {
-            uid: '3',
-            name: 'zzz.png',
-            status: 'error',
-            response: 'Server Error 500',
-            // custom error message to show
-            url: 'http://www.baidu.com/zzz.png'
-          }
-        ]
+        isTrue: null,
+        feedback: null,
+        fileList: []
       },
       rules: {
-        name: [
+        isTrue: [
           {
             required: true,
-            message: 'Please input Activity name',
+            message: '情况是否属实不能为空',
             trigger: 'blur'
-          },
+          }
+        ],
+        feedback: [
           {
-            min: 3,
-            max: 5,
-            message: 'Length should be 3 to 5',
+            required: true,
+            message: '志愿者反馈不能为空',
+            trigger: 'blur'
+          }
+        ],
+        fileList: [
+          {
+            required: true,
+            message: '家访资料不能为空',
             trigger: 'blur'
           }
         ]
@@ -260,14 +300,18 @@ export default {
     }
 
     const formRef = ref(null)
+    //保存家访反馈
     const onSubmit = () => {
       formRef.value
         .validate()
         .then(() => {
-          console.log('values', state.formState)
+          const params = {
+            ...state.formState
+          }
+          console.log(params)
         })
         .catch(error => {
-          console.log('error', error)
+          message.warning('请按规则完善字段')
         })
     }
 
@@ -285,9 +329,18 @@ export default {
 
 <style scoped lang="less">
 /deep/ .ant-form-item-label > label {
-  width: 95px;
+  width: 108px;
   text-align: right;
   display: inline-block;
+}
+.item-box {
+  margin-bottom: 20px;
+  .label {
+    width: 108px;
+    padding-right: 6px;
+    text-align: right;
+    display: inline-block;
+  }
 }
 .apply-box {
   .item {
