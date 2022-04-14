@@ -117,7 +117,7 @@ export const routerList = [
         path: '/otherApply',
         params: '',
         name: '/otherApply',
-        component: 'userManager/orgManager/OrgManager.vue'
+        component: 'applyManager/otherApply/OtherApply.vue'
       }
     ]
   }

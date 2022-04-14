@@ -5,7 +5,8 @@ import {
   getVolunteer,
   getStuMentors,
   getHkMentors,
-  getFundApplyList
+  getFundApplyList,
+  getOtherApplyList
 } from '@/services'
 import { reactive, toRefs, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
@@ -188,6 +189,37 @@ export function getAllFundApply() {
     setFundApplyList()
   })
   return { ...toRefs(state), setFundApplyList }
+}
+
+//获取所有申请
+export function getOtherApplyByStatus(status) {
+  const state = reactive({
+    ApplyList: [],
+    total: 0,
+    loading: false
+  })
+  async function setApplyList() {
+    try {
+      state.loading = true
+      const { msg, data, success } = await getOtherApplyList({
+        status: status
+      })
+      state.loading = false
+      if (success === true) {
+        state.ApplyList = data
+      } else {
+        message.warn(msg)
+      }
+    } catch (error) {
+      state.loading = false
+      throw new Error(error)
+    }
+  }
+
+  onMounted(() => {
+    setApplyList()
+  })
+  return { ...toRefs(state), setApplyList }
 }
 
 //获取香港导师

@@ -186,3 +186,11 @@ export const editFundApplyStatus = async (applyId, userId, status) => {
     status
   )
 }
+
+/**
+ * 按状态获取其他所有申请
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const getOtherApplyList = async params => {
+  return request.get('/api/apply/normal/list', params)
+}
