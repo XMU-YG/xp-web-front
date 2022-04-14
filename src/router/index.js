@@ -1,13 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/login/Login'
-import Home from '@/views/portal/home/Home'
-import AssistedStudent from '@/views/portal/assistedStudent/AssistedStudent'
 import TutorServices from '@/views/portal/tutorServices/TutorServices'
 import PersonalHomePage from '@/views/portal/personalHomePage/PersonalHomePage'
 import VolunteerServices from '@/views/portal/volunteerServices/VolunteerServices'
-import AboutAssisted from '@/views/portal/aboutAssisted/AboutAssisted'
-import Article from '@/views/portal/article/Article'
-import Publish from '@/views/portal/article/components/Publish'
 import { routerList } from './menu'
 
 function floatRoute(data) {
@@ -51,21 +46,9 @@ const routes = [
     children: null
   },
   {
-    path: '/assisted-student',
-    name: 'assistedStudent',
-    component: AssistedStudent,
-    children: null
-  },
-  {
     path: '/volunteer-service',
     name: 'volunteerServices',
     component: VolunteerServices,
-    children: null
-  },
-  {
-    path: '/about-assisted',
-    name: 'aboutAssisted',
-    component: AboutAssisted,
     children: null
   },
   {
@@ -104,54 +87,6 @@ const routes = [
       name: '文章帖子',
       isLogin: false
     }
-  },
-  {
-    path: '/personal-page',
-    name: 'personalHomePage',
-    component: PersonalHomePage,
-    children: null
-  },
-  {
-    path: '/portal-home',
-    name: 'home',
-    component: Home,
-    children: null
-  },
-  {
-    path: '/assisted-student',
-    name: 'assistedStudent',
-    component: AssistedStudent,
-    children: null
-  },
-  {
-    path: '/volunteer-service',
-    name: 'volunteerServices',
-    component: VolunteerServices,
-    children: null
-  },
-  {
-    path: '/about-assisted',
-    name: 'aboutAssisted',
-    component: AboutAssisted,
-    children: null
-  },
-  {
-    path: '/tutor-service',
-    name: 'tutorServices',
-    component: TutorServices,
-    children: null
-  },
-  {
-    path: '/article',
-    name: 'article',
-    component: Article,
-    children: null
-  },
-  {
-    path: '/publish',
-    name: 'publish',
-    component: Publish,
-    children: null
   },
   {
     path: '/personal-page',

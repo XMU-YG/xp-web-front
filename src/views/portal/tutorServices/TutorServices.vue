@@ -56,17 +56,38 @@ export default {
         {
           title: '标题',
           dataIndex: 'name',
-          key: 'name'
+          key: 'name',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '作者',
           dataIndex: 'tel',
-          key: 'tel'
+          key: 'tel',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '上传时间',
           dataIndex: 'tel',
-          key: 'tel'
+          key: 'tel',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '操作',
@@ -81,37 +102,86 @@ export default {
         {
           title: '姓名',
           dataIndex: 'name',
-          key: 'name'
+          key: 'name',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '邮箱',
           dataIndex: 'email',
-          key: 'email'
+          key: 'email',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '联系电话',
           dataIndex: 'phone',
-          key: 'phone'
+          key: 'phone',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '性别',
           dataIndex: 'sex',
-          key: 'sex'
+          key: 'sex',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '年级',
           dataIndex: 'grade',
-          key: 'grade'
+          key: 'grade',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '大学',
           dataIndex: 'university',
-          key: 'university'
+          key: 'university',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '专业',
           dataIndex: 'major',
-          key: 'major'
+          key: 'major',
+          customRender: ({ text }) => {
+            if (text === null || text === '') {
+              return '-'
+            } else {
+              return text
+            }
+          }
         },
         {
           title: '操作',
@@ -151,10 +221,9 @@ export default {
     }
 
     //成绩报告按钮
-    function report() {
+    function report(record) {
       let routeData = router.resolve({
-        path: '/article-detail/' + 'ididididsafsdafdsafdsafd',
-        query: { type: 'detail' }
+        path: '/article-detail/' + record.id
       })
       window.open(routeData.href, '_blank')
     }
