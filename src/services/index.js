@@ -53,14 +53,14 @@ export const getUniversityNames = async () => {
  * @returns Promise<{code: number, msg: string}>
  */
 export const getHighSchoolNames = async () => {
-  return request.get('/api/user/student/highSchNames')
+  return request.get('/api/user/school/list')
 }
 /**
  * 预受助学生信息列表服务
  * @returns Promise<{code: number, data: Array, msg: string}>
  */
 export const getNoStuInfoService = async () => {
-  return request.get('/api/user/student/list/not_fund')
+  return request.get('/api/user/student/listPage/not_fund')
 }
 
 /**
@@ -76,7 +76,6 @@ export const getIndexImages = async () => {
  * @returns Promise<{code: number, data: Array, msg: string}>
  */
 export const getIndexArticle = async () => {
-  console.log('xxxxxxxxxxx')
   return request.get('/api/article/recommend')
 }
 
@@ -151,4 +150,39 @@ export const createArticle = async params => {
  */
 export const uploadFile = async params => {
   return request.post('/api/file/upload', params)
+}
+
+/**
+ * 获取管理员
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const getSystem = async () => {
+  return request.get('/api/user/managers')
+}
+
+/**
+ * 获取志愿者
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const getVolunteer = async () => {
+  return request.get('/api/volunteer/list')
+}
+
+/**
+ * 获取志愿者
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const getFundApplyList = async () => {
+  return request.get('/api/apply/fund/list')
+}
+
+/**
+ * 修改助学申请状态
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const editFundApplyStatus = async (applyId, userId, status) => {
+  return request.post(
+    '/api/apply/fund/status/' + userId + '/' + applyId,
+    status
+  )
 }
