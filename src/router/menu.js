@@ -109,7 +109,7 @@ export const routerList = [
         path: '/fundApply',
         params: '/:id(.+)?',
         name: '/fundApply',
-        component: 'userManager/orgManager/OrgManager.vue'
+        component: 'applyManager/fundApply/FundApply.vue'
       },
       {
         id: uuid(),

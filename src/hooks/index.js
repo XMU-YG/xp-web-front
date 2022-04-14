@@ -4,7 +4,8 @@ import {
   getSystem,
   getVolunteer,
   getStuMentors,
-  getHkMentors
+  getHkMentors,
+  getFundApplyList
 } from '@/services'
 import { reactive, toRefs, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
@@ -54,7 +55,8 @@ export function useNotStuList() {
       const { msg, data, success } = await getNoStuInfoService()
       state.loading = false
       if (success === true) {
-        state.notStuList = data
+        state.notStuList = data.list
+        state.total = data.total
       } else {
         message.warn(msg)
       }
@@ -157,6 +159,35 @@ export function getStuMentorList(params) {
     setStuMentorList()
   })
   return { ...toRefs(state), setStuMentorList }
+}
+
+//获取所有申请
+export function getAllFundApply() {
+  const state = reactive({
+    fundApplyList: [],
+    total: 0,
+    loading: false
+  })
+  async function setFundApplyList() {
+    try {
+      state.loading = true
+      const { msg, data, success } = await getFundApplyList()
+      state.loading = false
+      if (success === true) {
+        state.fundApplyList = data
+      } else {
+        message.warn(msg)
+      }
+    } catch (error) {
+      state.loading = false
+      throw new Error(error)
+    }
+  }
+
+  onMounted(() => {
+    setFundApplyList()
+  })
+  return { ...toRefs(state), setFundApplyList }
 }
 
 //获取香港导师
