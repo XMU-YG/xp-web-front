@@ -1,11 +1,11 @@
 <template>
   <setion class="login-wrap">
-    <div class="header-imgage">
-      <my-icon type="icon-touxiang" class="my-icon" />
+    <!-- <div class="header-imgage">
       <span class="name">admin</span>
-    </div>
+    </div> -->
     <div class="person-info">
       <a-dropdown>
+        <my-icon type="icon-touxiang" class="my-icon" />
         <a href="javascript:;" class="current-user">
           管理员
           <DownOutlined style="color: #5b5e6e" />
@@ -42,6 +42,7 @@ export default {
     const router = useRouter()
 
     function logOut() {
+      localStorage.clear()
       router.push('/login')
     }
 

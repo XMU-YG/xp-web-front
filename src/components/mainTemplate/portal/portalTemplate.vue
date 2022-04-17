@@ -17,17 +17,19 @@
             <div class="login-wrap">
               <div class="header-imgage">
                 <my-icon type="icon-touxiang" class="my-icon" />
-                <span class="name">admin</span>
               </div>
               <div class="person-info">
                 <a-dropdown>
                   <a href="javascript:;" class="current-user">
-                    管理员
+                    {{ cookieUser.name }}
                     <DownOutlined style="color: #5b5e6e" />
                   </a>
                   <template #overlay>
                     <a-menu class="custom-menu">
-                      <a-menu-item key="logout">
+                      <a-menu-item
+                        v-if="menuList.indexOf('后台管理') > -1"
+                        key="logout"
+                      >
                         <a-button
                           type="link"
                           class="link-btn"
@@ -61,8 +63,18 @@
               @select="select"
             >
               <a-menu-item key="/"> 首页 </a-menu-item>
-              <a-menu-item key="/tutor-service"> 导师服务 </a-menu-item>
-              <a-menu-item key="/volunteer-service"> 志愿者服务 </a-menu-item>
+              <a-menu-item
+                v-if="menuList.indexOf('导师助手') > -1"
+                key="/tutor-service"
+              >
+                导师服务
+              </a-menu-item>
+              <a-menu-item
+                v-if="menuList.indexOf('志愿者服务') > -1"
+                key="/volunteer-service"
+              >
+                志愿者服务
+              </a-menu-item>
               <a-menu-item key="/article"> 文章帖子 </a-menu-item>
               <a-menu-item key="/personal-page"> 个人主页 </a-menu-item>
             </a-menu>
@@ -88,6 +100,7 @@ import { reactive, toRefs, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getMenuList } from '@/services'
 import ResetPwd from '@/components/mainTemplate/portal/ResetPwd'
+import LocalSave from '@/utils/localSave'
 export default {
   components: {
     ResetPwd
@@ -97,16 +110,20 @@ export default {
     const state = reactive({
       selectedKeys: ['/home'],
       menuList: [],
-      visible: false
+      visible: false,
+      cookieUser: {}
     })
 
     onMounted(() => {
+      state.cookieUser = LocalSave.getJson('cookieUser')
       getMenu()
     })
 
     async function getMenu() {
       try {
-        state.menuList = await getMenuList()
+        state.menuList = await getMenuList({
+          userId: LocalSave.getJson('cookieUser').id
+        })
       } catch (e) {
         throw Error(e)
       }

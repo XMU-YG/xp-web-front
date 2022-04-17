@@ -30,11 +30,13 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs } from 'vue'
 export default {
-  setup() {
+  setup(props) {
     const state = reactive({})
-
+    onMounted(() => {
+      console.log(props.data)
+    })
     return {
       ...toRefs(state)
     }

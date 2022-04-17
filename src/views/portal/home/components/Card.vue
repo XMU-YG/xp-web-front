@@ -3,20 +3,16 @@
     <div class="top">
       <div class="img">
         <a-space>
-          <img src="../../../../assets/images/girl2.png" alt="女生图片" />
+          <img :src="data.avatar" />
           <span>{{ data.writer }}</span>
           <span>{{ data.writerUniversity }}</span>
           <span>{{ data.writerMajor }}</span>
         </a-space>
       </div>
-      <span>{{
-        data.gmtCreate
-          ? moment(data.gmtCreate).format('YYYY-MM-DD HH:mm:ss')
-          : ''
-      }}</span>
+      <span>{{ data.gmtCreate }}</span>
     </div>
     <div class="content">
-      <div class="title">{{ data.mark }}</div>
+      <div class="title">{{ data.title }}</div>
       <div class="bottom">
         <div class="left">
           <a-space>
@@ -26,7 +22,7 @@
           </a-space>
         </div>
         <div class="right">
-          <a-button type="primary">学习分享</a-button>
+          <a-button type="primary">{{ data.mark }}</a-button>
         </div>
       </div>
     </div>

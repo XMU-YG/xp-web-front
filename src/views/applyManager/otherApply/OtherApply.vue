@@ -26,13 +26,11 @@
               </template>
               <template #operation="{ record }">
                 <a-space>
-                  <a-tag class="custom-tag" @click="editBtn(record, '拒绝')"
-                    >拒绝</a-tag
+                  <a style="color: red" @click="editBtn(record, '拒绝')"
+                    >拒绝</a
                   >
-                  <a-tag
-                    class="custom-tag custom-tag-waring"
-                    @click="editBtn(record, '通过')"
-                    >通过</a-tag
+                  <a style="color: green" @click="editBtn(record, '通过')"
+                    >通过</a
                   >
                 </a-space>
               </template>
@@ -48,7 +46,7 @@ import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { Modal } from 'ant-design-vue'
 import { message } from 'ant-design-vue'
 import MainTemplate from '@/components/mainTemplate/MainTemplate'
-import { editFundApplyStatus, getFundApplyList } from '@/services'
+import { editOtherApplyStatus } from '@/services'
 import { getAllFundApply, getOtherApplyByStatus } from '@/hooks'
 export default defineComponent({
   components: {
@@ -87,8 +85,40 @@ export default defineComponent({
         },
         {
           title: '申请状态',
-          dataIndex: 'status',
-          key: 'status',
+          dataIndex: 'state',
+          key: 'state',
+          customRender: ({ text }) => {
+            let color = undefined
+            if (text === '已通过') {
+              color = 'green'
+            } else if (text === '未审核') {
+              color = 'geekblue'
+            } else {
+              color = 'volcano'
+            }
+            return (
+              <a-tag color={color} key={text}>
+                {text}
+              </a-tag>
+            )
+          },
+          filters: [
+            {
+              text: '未审核',
+              value: '未审核'
+            },
+            {
+              text: '已通过',
+              value: '已通过'
+            },
+            {
+              text: '未通过',
+              value: '未通过'
+            }
+          ],
+          // specify the condition of filtering result
+          // here is that finding the name started with `value`
+          onFilter: (value, record) => record.state === value,
           ellipsis: true
         },
         {
@@ -128,9 +158,9 @@ export default defineComponent({
         cancelText: '取消',
         onOk: () => {
           if (status === '通过') {
-            editStatus(row, 5)
+            editStatus(row, 1)
           } else if (status === '拒绝') {
-            editStatus(row, -1)
+            editStatus(row, 2)
           }
         },
         onCancel: () => {
@@ -141,9 +171,8 @@ export default defineComponent({
 
     async function editStatus(row, status) {
       try {
-        const { msg, data, success } = await editFundApplyStatus(
+        const { msg, data, success } = await editOtherApplyStatus(
           row.id,
-          row.userId,
           status
         )
         if (data === true) {

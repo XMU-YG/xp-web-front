@@ -102,7 +102,7 @@ import { Modal } from 'ant-design-vue'
 import { message } from 'ant-design-vue'
 import { getVolunteerLists } from '@/hooks'
 import MainTemplate from '@/components/mainTemplate/MainTemplate'
-import { getHighSchoolNames } from '@/services'
+import { editVolunteer, getHighSchoolNames } from '@/services'
 export default defineComponent({
   components: {
     MainTemplate
@@ -195,13 +195,13 @@ export default defineComponent({
     const formRef = ref()
     //编辑按钮
     function editBtn(row) {
+      getHighSchool()
       state.visible = true
       state.formState.name = row.userName
       state.formState.type = row.type
       state.formState.visitSchool = row.visitSchool
       state.formState.isLeader = row.isLeader
-      console.log(row.id)
-      getHighSchool()
+      state.formState.id = row.id
     }
     //关键字搜索高中名字
     const filterOptionHighSchool = (input, option) => {
@@ -215,6 +215,19 @@ export default defineComponent({
           state.highSchools = data
         } else {
           message.warn(msg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+    //修改志愿者信息
+    async function editVolunteerInfo(info) {
+      try {
+        const { errMsg, data, success } = await editVolunteer(info)
+        if (success === true && data === true) {
+          message.success('修改成功')
+        } else {
+          message.warn(errMsg)
         }
       } catch (error) {
         throw new Error(error)
@@ -237,6 +250,7 @@ export default defineComponent({
     }
     function okBtn() {
       console.log(state.formState)
+      editVolunteerInfo(state.formState)
     }
 
     return {

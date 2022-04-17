@@ -25,14 +25,14 @@
             placeholder="请输入密码"
           />
         </a-form-item>
-        <a-form-item label="" name="verificationCode">
+        <!-- <a-form-item label="" name="verificationCode">
           <a-input
             v-model:value="formState.verificationCode"
             placeholder="请输入验证码"
             style="width: 70%; margin-right: 10px"
           />
           <img src="" alt="验证码" />
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item label="登录类型" name="type">
           <a-radio-group v-model:value="formState.type">
             <a-radio value="1">学校</a-radio>
@@ -52,6 +52,8 @@
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
+import { login } from '@/services'
+import LocalSave from '@/utils/localSave'
 export default defineComponent({
   setup() {
     const state = reactive({
@@ -104,13 +106,20 @@ export default defineComponent({
 
     async function submit() {
       const params = {
-        username: state.formState.username,
-        password: state.formState.password,
-        verificationCode: state.formState.verificationCode,
-        type: state.formState.type
+        email: state.formState.username,
+        password: state.formState.password
       }
-      console.log(params, 'params')
-      router.push('/home')
+      try {
+        const { errMsg, data, success } = await login(params)
+        if (success === true) {
+          LocalSave.saveJson('cookieUser', data)
+          router.push('/home')
+        } else {
+          message.warn(errMsg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
     }
 
     return {

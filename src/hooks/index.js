@@ -6,7 +6,11 @@ import {
   getStuMentors,
   getHkMentors,
   getFundApplyList,
-  getOtherApplyList
+  getOtherApplyList,
+  getHighSchoolNames,
+  getArticleDetails,
+  getStudentByMentorId,
+  getStudentByVolunteerId
 } from '@/services'
 import { reactive, toRefs, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
@@ -250,4 +254,105 @@ export function getHkMentorList(params) {
     setStuMentorList()
   })
   return { ...toRefs(state), setStuMentorList }
+}
+
+//获取高中学校
+export function getHighSchools() {
+  const state = reactive({
+    list: []
+  })
+  //获取高中学校列表
+  async function getHighSchool() {
+    try {
+      const { msg, data, success } = await getHighSchoolNames()
+      if (success === true) {
+        state.list = data
+      } else {
+        message.warn(msg)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  // onMounted(() => {
+  //   getHighSchool()
+  // })
+  return { ...toRefs(state), getHighSchool }
+}
+
+//获取文章详情
+export function getArticleDetail(id) {
+  const state = reactive({
+    article: undefined
+  })
+  async function getArticle(id) {
+    try {
+      const { errMsg, data, success } = await getArticleDetails(id)
+      if (success === true) {
+        state.article = data
+      } else {
+        message.warn(errMsg)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  onMounted(() => {
+    getArticle(id)
+  })
+  return { ...toRefs(state), getArticle }
+}
+
+//获取导师学生
+export function getStudentsByMentorId(mentorId) {
+  const state = reactive({
+    list: [],
+    loading: false
+  })
+  async function setList(mentorId) {
+    try {
+      state.loading = true
+      const { errMsg, data, success } = await getStudentByMentorId(mentorId)
+      state.loading = false
+      if (success === true) {
+        state.list = data
+      } else {
+        message.warn(errMsg)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  onMounted(() => {
+    setList(mentorId)
+  })
+  return { ...toRefs(state), setList }
+}
+
+//获取家访学生
+export function getStudentsByVolunteerId(volunteerId) {
+  const state = reactive({
+    list: [],
+    loading: false
+  })
+  async function setList(mentorId) {
+    try {
+      state.loading = true
+      const { errMsg, data, success } = await getStudentByVolunteerId(
+        volunteerId
+      )
+      state.loading = false
+      if (success === true) {
+        state.list = data
+      } else {
+        message.warn(errMsg)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  onMounted(() => {
+    setList(volunteerId)
+  })
+  return { ...toRefs(state), setList }
 }

@@ -5,9 +5,18 @@
       <a-table
         :columns="columns"
         rowKey="id"
-        :dataSource="dataSource"
-        size="middle"
-        :pagination="false"
+        :dataSource="list"
+        :loading="loading"
+        :pagination="{
+          current: pageIndex,
+          pageSize: pageSize,
+          total: total,
+          showSizeChanger: true,
+          pageSizeOptions: ['5', '10', '20'], //每页中显示的数据
+          showTotal: infoTotal => `共${infoTotal}条`,
+          showQuickJumper: true
+        }"
+        @change="changePage"
       >
         <template #name="{ record }">
           <a style="text-decoration: underline" @click="applyBtn(record)">{{
@@ -17,7 +26,7 @@
         <template #operation="{ record }">
           <a-space>
             <a
-              @click="lookReport(record)"
+              :href="record.applyMaterial"
               style="text-decoration: underline; color: green"
               >下载申请材料</a
             >
@@ -122,6 +131,8 @@
 import { reactive, toRefs, ref } from 'vue'
 import portalTemplate from '@/components/mainTemplate/portal/portalTemplate'
 import { message } from 'ant-design-vue'
+import LocalSave from '@/utils/localSave'
+import { getStudentsByVolunteerId } from '@/hooks'
 export default {
   components: {
     portalTemplate
@@ -131,6 +142,8 @@ export default {
       visible: false,
       applyVisible: false,
       currentObj: {},
+      pageIndex: 1,
+      pageSize: 5,
       columns: [
         {
           title: '姓名',
@@ -231,26 +244,6 @@ export default {
           slots: { customRender: 'operation' }
         }
       ],
-      dataSource: [
-        {
-          id: Math.random(),
-          number: 'xp123123',
-          name: '张三',
-          tel: '15464687127'
-        },
-        {
-          id: Math.random(),
-          number: 'xp123123',
-          name: '张三',
-          tel: '15464687127'
-        },
-        {
-          id: Math.random(),
-          number: 'xp123123',
-          name: '张三',
-          tel: '15464687127'
-        }
-      ],
       formState: {
         isTrue: null,
         feedback: null,
@@ -281,6 +274,9 @@ export default {
       }
     })
 
+    const { list, loading, setList } = getStudentsByVolunteerId(
+      LocalSave.getJson('cookieUser').id
+    )
     //家访反馈
     function feedback(record) {
       state.visible = true
@@ -318,6 +314,8 @@ export default {
     return {
       ...toRefs(state),
       feedback,
+      list,
+      loading,
       applyBtn,
       onSubmit,
       formRef,

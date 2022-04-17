@@ -5,9 +5,18 @@
       <a-table
         :columns="columns"
         rowKey="id"
-        :dataSource="dataSource"
-        size="middle"
-        :pagination="false"
+        :dataSource="list"
+        :loading="loading"
+        :pagination="{
+          current: pageIndex,
+          pageSize: pageSize,
+          total: total,
+          showSizeChanger: true,
+          pageSizeOptions: ['5', '10', '20'], //每页中显示的数据
+          showTotal: infoTotal => `共${infoTotal}条`,
+          showQuickJumper: true
+        }"
+        @change="changePage"
       >
         <template #operation="{ record }">
           <a @click="lookReport(record)" style="text-decoration: underline"
@@ -25,14 +34,13 @@
       <a-table
         :columns="columnsReport"
         rowKey="id"
-        :dataSource="dataSource"
+        :loading="rloading"
+        :dataSource="reports"
         size="middle"
         :pagination="false"
       >
         <template #operation="{ record }">
-          <a @click="report(record)" style="text-decoration: underline"
-            >成绩报告</a
-          >
+          <a @click="report(record)" style="text-decoration: underline">查看</a>
         </template>
       </a-table>
     </a-modal>
@@ -43,6 +51,10 @@
 import { reactive, toRefs } from 'vue'
 import portalTemplate from '@/components/mainTemplate/portal/portalTemplate'
 import { useRouter } from 'vue-router'
+import { getStudentsByMentorId } from '@/hooks'
+import LocalSave from '@/utils/localSave'
+import { getReportsByUserId } from '@/services'
+import { message } from 'ant-design-vue'
 export default {
   components: {
     portalTemplate
@@ -51,12 +63,15 @@ export default {
     const router = useRouter()
     const state = reactive({
       visible: false,
+      pageIndex: 1,
+      reports: [],
+      pageSize: 5,
       currentObj: {},
       columnsReport: [
         {
           title: '标题',
-          dataIndex: 'name',
-          key: 'name',
+          dataIndex: 'title',
+          key: 'title',
           customRender: ({ text }) => {
             if (text === null || text === '') {
               return '-'
@@ -67,8 +82,8 @@ export default {
         },
         {
           title: '作者',
-          dataIndex: 'tel',
-          key: 'tel',
+          dataIndex: 'writer',
+          key: 'writer',
           customRender: ({ text }) => {
             if (text === null || text === '') {
               return '-'
@@ -79,8 +94,8 @@ export default {
         },
         {
           title: '上传时间',
-          dataIndex: 'tel',
-          key: 'tel',
+          dataIndex: 'gmtCreate',
+          key: 'gmtCreate',
           customRender: ({ text }) => {
             if (text === null || text === '') {
               return '-'
@@ -191,34 +206,32 @@ export default {
           fixed: 'right',
           slots: { customRender: 'operation' }
         }
-      ],
-      dataSource: [
-        {
-          id: Math.random(),
-          number: 'xp123123',
-          name: '张三',
-          tel: '15464687127'
-        },
-        {
-          id: Math.random(),
-          number: 'xp123123',
-          name: '张三',
-          tel: '15464687127'
-        },
-        {
-          id: Math.random(),
-          number: 'xp123123',
-          name: '张三',
-          tel: '15464687127'
-        }
       ]
     })
 
+    async function getReport(userId) {
+      try {
+        state.rloading = true
+        const { errMsg, data, success } = await getReportsByUserId(userId)
+        state.rloading = false
+        if (success === true) {
+          state.reports = data
+        } else {
+          message.warn(errMsg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
     //查看成绩报告按钮
     function lookReport(record) {
       state.visible = true
       state.currentObj = record
+      getReport(241)
     }
+    const { list, loading, setList } = getStudentsByMentorId(
+      LocalSave.getJson('cookieUser').id
+    )
 
     //成绩报告按钮
     function report(record) {
@@ -228,10 +241,20 @@ export default {
       window.open(routeData.href, '_blank')
     }
 
+    function changePage(pagination) {
+      console.log(' data ')
+      state.pageIndex = pagination.current
+      state.pageSize = pagination.pageSize
+      console.log(state.pageIndex)
+    }
+
     return {
       ...toRefs(state),
       lookReport,
-      report
+      report,
+      list,
+      loading,
+      changePage
     }
   }
 }

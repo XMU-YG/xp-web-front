@@ -28,9 +28,9 @@
         <h2>推荐文章</h2>
         <div class="card">
           <Card
-            @click="openDetail"
+            @click="openDetail(item.id)"
             v-for="item in articleList"
-            :key="item"
+            :key="item.id"
             :data="{ ...item }"
           />
         </div>
@@ -79,9 +79,10 @@ export default {
       }
     }
     //查看详情
-    function openDetail() {
+    function openDetail(id) {
+      console.log(id)
       let routeData = router.resolve({
-        path: '/article-detail/' + 'ididididsafsdafdsafdsafd',
+        path: '/article-detail/' + id,
         query: { type: 'detail' }
       })
       window.open(routeData.href, '_blank')

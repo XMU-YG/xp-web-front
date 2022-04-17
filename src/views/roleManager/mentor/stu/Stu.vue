@@ -15,7 +15,7 @@
                 pageSize: pageSize,
                 total: total,
                 showSizeChanger: true,
-                pageSizeOptions: ['10', '20', '50'], //每页中显示的数据
+                pageSizeOptions: ['5', '10', '20'], //每页中显示的数据
                 showTotal: infoTotal => `共${infoTotal}条`,
                 showQuickJumper: true
               }"
@@ -45,7 +45,7 @@ export default defineComponent({
     const state = reactive({
       activeKey: 'list',
       pageIndex: 1,
-      pageSize: 10,
+      pageSize: 5,
       search: {
         fileTitle: '',
         markFlag: null,

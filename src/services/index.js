@@ -93,7 +93,7 @@ export const getMenuList = async params => {
  * @returns Promise<{code: number, data: Array, msg: string}>
  */
 export const getStudentByMentorId = async currentUserId => {
-  return request.get('/api/user/mentor/' + currentUserId)
+  return request.get('/api/user/student/mentor/' + currentUserId)
 }
 
 /**
@@ -101,7 +101,7 @@ export const getStudentByMentorId = async currentUserId => {
  * @returns Promise<{code: number, data: Array, msg: string}>
  */
 export const getStudentByVolunteerId = async currentUserId => {
-  return request.get('/api/user/volunteer/' + currentUserId)
+  return request.get('/api/user/student/volunteer/' + currentUserId)
 }
 
 /**
@@ -169,7 +169,7 @@ export const getVolunteer = async () => {
 }
 
 /**
- * 获取志愿者
+ * 获取助学金申请
  * @returns Promise<{code: number, data: Array, msg: string}>
  */
 export const getFundApplyList = async () => {
@@ -193,4 +193,28 @@ export const editFundApplyStatus = async (applyId, userId, status) => {
  */
 export const getOtherApplyList = async params => {
   return request.get('/api/apply/normal/list', params)
+}
+
+/**
+ * 修改普通申请状态
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const editOtherApplyStatus = async (applyId, status) => {
+  return request.put('/api/apply/normal/check/' + applyId, status)
+}
+
+/**
+ * 登录
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const login = async params => {
+  return request.get('/api/user/student/login', params)
+}
+
+/**
+ * 修改或者增加志愿者信息
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const editVolunteer = async data => {
+  return request.post('/api/volunteer/edit', data)
 }
