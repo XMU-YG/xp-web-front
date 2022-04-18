@@ -3,7 +3,7 @@
     <div class="top">
       <div class="img">
         <a-space>
-          <img :src="data.avatar" />
+          <img style="border-radius: 50%" :src="data.writerAvatar" />
           <span>{{ data.writer }}</span>
           <span>{{ data.writerUniversity }}</span>
           <span>{{ data.writerMajor }}</span>

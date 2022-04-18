@@ -10,7 +10,10 @@ import {
   getHighSchoolNames,
   getArticleDetails,
   getStudentByMentorId,
-  getStudentByVolunteerId
+  getStudentByVolunteerId,
+  getFundApplyByUserId,
+  getAllArticle,
+  getArticleByUserId
 } from '@/services'
 import { reactive, toRefs, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
@@ -355,4 +358,82 @@ export function getStudentsByVolunteerId(volunteerId) {
     setList(volunteerId)
   })
   return { ...toRefs(state), setList }
+}
+
+//根据id获取学生申请信息
+export function getFundApply(userId) {
+  const state = reactive({
+    info: {}
+  })
+  async function setInfo(userId) {
+    try {
+      const { errMsg, data, success } = await getFundApplyByUserId(userId)
+      console.log(data, 'http')
+      if (success === true) {
+        state.info = data
+      } else {
+        message.warn(errMsg)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  onMounted(() => {
+    setInfo(userId)
+  })
+  return { ...toRefs(state), setInfo }
+}
+
+//获取所有可见文章
+export function allArticles(params) {
+  const state = reactive({
+    list: [],
+    total: 0,
+    loading: false
+  })
+  async function setList() {
+    try {
+      state.loading = true
+      const { errMsg, data, success } = await getAllArticle(params)
+      state.loading = false
+      if (success === true) {
+        state.list = data.list
+        state.total = data.total
+      } else {
+        message.warn(errMsg)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  onMounted(() => {
+    setList(params)
+  })
+  return { ...toRefs(state), setList }
+}
+
+//获取某人文章
+export function selfArticles(userId) {
+  const state = reactive({
+    articles: [],
+    loading: false
+  })
+  async function setArticles(userId) {
+    try {
+      state.loading = true
+      const { errMsg, data, success } = await getArticleByUserId(userId)
+      state.loading = false
+      if (success === true) {
+        state.list = data
+      } else {
+        message.warn(errMsg)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  onMounted(() => {
+    setArticles(userId)
+  })
+  return { ...toRefs(state), setArticles }
 }

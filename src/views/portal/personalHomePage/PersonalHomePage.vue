@@ -3,19 +3,20 @@
     <div class="nav">个人主页</div>
     <div class="main-content-box">
       <a-form ref="myForm" :rules="rules" :model="formData">
-        <div class="pohto-box" v-if="isDetail">
-          <img
-            src="../../../assets/images/touxiang1.png"
-            alt=""
-            v-if="!imgUrl && sex === 0"
-          />
-          <img
-            src="../../../assets/images/touxiang2.png"
-            v-else-if="!imgUrl && sex === 1"
-          />
-          <a-image v-else :src="imgUrl" />
+        <div class="pohto-box">
+          <a-image :src="formData.avatar"></a-image>
+          <a-upload
+            @change="handleChange"
+            v-if="!isDetail"
+            action="/api/file/upload?path=dbfile/temp"
+          >
+            <a-button>
+              <upload-outlined></upload-outlined>
+              上传
+            </a-button>
+          </a-upload>
         </div>
-        <a-form-item label="头像图片" name="img" v-else>
+        <!-- <a-form-item label="头像图片" name="img" v-else>
           <a-upload
             v-model:file-list="fileList"
             name="profile"
@@ -38,7 +39,7 @@
               <div class="ant-upload-text">上传</div>
             </div>
           </a-upload>
-        </a-form-item>
+        </a-form-item> -->
         <div class="item-box">
           <div class="title">
             <img src="../../../assets/images/jinqi.png" alt="" />
@@ -51,65 +52,59 @@
                   <a-input
                     allow-clear
                     v-model:value="formData.name"
-                    :placeholder="isDetail ? '-' : '请输入'"
                     disabled="true"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="身份证号" name="idNumber">
+                <a-form-item label="身份证号" name="idCard">
                   <a-input
                     allow-clear
-                    v-model:value="formData.idNumber"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.idCard"
                     :disabled="isDetail"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="邮箱" name="mailbox">
+                <a-form-item label="邮箱" name="email">
                   <a-input
                     allow-clear
-                    v-model:value="formData.mailbox"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.email"
                     disabled="true"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="性别" name="gender">
+                <a-form-item label="性别" name="sex">
                   <a-input
                     allow-clear
-                    v-model:value="formData.gender"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.sex"
                     :disabled="isDetail"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="生源地" name="ofStudent">
-                  <SelectTree
-                    v-model:treeValue="formData.ofStudent"
+                <a-form-item label="生源地" name="region">
+                  <a-input
+                    v-model:value="formData.region"
                     :disabled="isDetail"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="届" name="session">
+                <a-form-item label="届" name="grade">
                   <a-input
                     allow-clear
-                    v-model:value="formData.session"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.grade"
                     :disabled="isDetail"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="电话" name="tel">
+                <a-form-item label="电话" name="phone">
                   <a-input
                     allow-clear
-                    v-model:value="formData.tel"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.phone"
                     :disabled="isDetail"
                   />
                 </a-form-item>
@@ -118,8 +113,7 @@
                 <a-form-item label="QQ" name="QQ">
                   <a-input
                     allow-clear
-                    v-model:value="formData.QQ"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.qq"
                     :disabled="isDetail"
                   />
                 </a-form-item>
@@ -128,26 +122,24 @@
                 <a-form-item label="微信" name="wx">
                   <a-input
                     allow-clear
-                    v-model:value="formData.wx"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.weixin"
                     :disabled="isDetail"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="现居住地" name="address">
-                  <SelectTree
-                    v-model:treeValue="formData.address"
+                <a-form-item label="现居住地" name="living">
+                  <a-input
+                    v-model:value="formData.living"
                     :disabled="isDetail"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="学生导师" name="studentTutor">
+                <a-form-item label="学生导师" name="stuMentorName">
                   <a-input
                     allow-clear
-                    v-model:value="formData.studentTutor"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.stuMentorName"
                     disabled="true"
                   />
                 </a-form-item>
@@ -156,8 +148,7 @@
                 <a-form-item label="香港导师" name="hkTutor">
                   <a-input
                     allow-clear
-                    v-model:value="formData.hkTutor"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.hkMentorName"
                     disabled="true"
                   />
                 </a-form-item>
@@ -177,15 +168,14 @@
                   <a-input
                     allow-clear
                     v-model:value="formData.highSchool"
-                    :placeholder="isDetail ? '-' : '请输入'"
                     disabled="true"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="高中学校地址" name="highSchoolAddress">
-                  <SelectTree
-                    v-model:treeValue="formData.highSchoolAddress"
+                <a-form-item label="高中学校地址" name="highSchRegion">
+                  <a-input
+                    v-model:value="formData.highSchRegion"
                     :disabled="isDetail"
                   />
                 </a-form-item>
@@ -195,7 +185,6 @@
                   <a-input
                     allow-clear
                     v-model:value="formData.university"
-                    :placeholder="isDetail ? '-' : '请输入'"
                     :disabled="isDetail"
                   />
                 </a-form-item>
@@ -205,18 +194,16 @@
                   <a-input
                     allow-clear
                     v-model:value="formData.major"
-                    :placeholder="isDetail ? '-' : '请输入'"
                     :disabled="isDetail"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="学年制" name="scholastic">
+                <a-form-item label="学年制" name="schoolYear">
                   <a-input-number
                     style="width: 100%"
                     :disabled="isDetail"
-                    :placeholder="isDetail ? '-' : '请输入'"
-                    v-model:value="formData.scholastic"
+                    v-model:value="formData.schoolYear"
                     :min="0"
                     :max="10"
                     :step="1"
@@ -234,29 +221,27 @@
           <div class="item-content">
             <a-row :gutter="24">
               <a-col :span="12">
-                <a-form-item label="银行卡卡号" name="bankCard">
+                <a-form-item label="银行卡卡号" name="bankCardNo">
                   <a-input
                     allow-clear
-                    v-model:value="formData.bankCard"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.bankCardNo"
                     :disabled="isDetail"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="银行名称" name="bank">
+                <a-form-item label="银行名称" name="bankName">
                   <a-input
                     allow-clear
-                    v-model:value="formData.bank"
-                    :placeholder="isDetail ? '-' : '请输入'"
+                    v-model:value="formData.bankName"
                     :disabled="isDetail"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="开户行地址" name="acountAddress">
-                  <SelectTree
-                    v-model:treeValue="formData.acountAddress"
+                <a-form-item label="开户行地址" name="bankAddress">
+                  <a-input
+                    v-model:value="formData.bankAddress"
                     :disabled="isDetail"
                   />
                 </a-form-item>
@@ -281,43 +266,58 @@
 </template>
 
 <script>
-import { reactive, toRefs, ref } from 'vue'
+import { reactive, toRefs, ref, onMounted } from 'vue'
 import portalTemplate from '@/components/mainTemplate/portal/portalTemplate'
 import SelectTree from './components/SelectTree'
 import { message } from 'ant-design-vue'
+import { getUsersbyIds, putAlreadyStu } from '@/services'
+import LocalSave from '@/utils/localSave'
+import router from '@/router'
+import { useRouter } from 'vue-router'
 export default {
   components: {
-    portalTemplate,
-    SelectTree
+    portalTemplate
   },
   setup() {
+    const router = useRouter()
     const state = reactive({
       isDetail: true,
       fileList: [],
-      imgUrl:
-        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      imgUrl: 'https://xpef.oss-cn-chengdu.aliyuncs.com/images/avatar.png',
       sex: 0,
       formData: {
-        name: '',
-        idNumber: '',
-        mailbox: null,
-        gender: null,
-        ofStudent: null,
-        session: null,
-        tel: null,
-        QQ: null,
-        wx: null,
-        address: null,
-        studentTutor: null,
-        hkTutor: null,
-        highSchool: null,
-        highSchoolAddress: null,
-        university: null,
-        major: null,
-        scholastic: null,
-        bankCard: null,
-        bank: null,
-        acountAddress: null
+        applyMaterial: null,
+        applyStatus: null,
+        avatar: 'https://xpef.oss-cn-chengdu.aliyuncs.com/images/avatar.png',
+        bankAddress: '安随广东移动其',
+        bankCardNo: '898658555',
+        bankName: '中国银行',
+        email: '1725993571@qq.com',
+        fundType: '大学助学金',
+        grade: '2018级',
+        highSchRegion: null,
+        highSchool: '修文中学',
+        hkMentorId: null,
+        hkMentorName: '區徐静儀',
+        id: 241,
+        idCard: '520123200005161218',
+        isFunded: 1,
+        isMentor: 1,
+        isQualified: 1,
+        isSystem: 2,
+        living: '鬼宅打到后期无敌回去我电话',
+        major: '软件工程',
+        name: '叶刚',
+        phone: '18786044750',
+        qq: '1725993571',
+        region: '贵州省贵阳市修文县',
+        schoolYear: 4,
+        sex: '男',
+        stuMentorId: null,
+        stuMentorName: '',
+        university: '厦门大学',
+        weixin: '18786044750',
+        xpNo: 'XP-00241'
       },
       rules: {},
       tree: [
@@ -426,6 +426,14 @@ export default {
       state.isDetail = true
     }
 
+    const handleChange = info => {
+      const file = info.file
+      const status = info.file.status
+      if (status === 'done') {
+        const res = file.response.data
+        state.formData.avatar = res
+      }
+    }
     const myForm = ref(null)
     function submitBtn() {
       myForm.value
@@ -433,10 +441,40 @@ export default {
         .then(() => {
           const params = { ...state.formData }
           console.log(params, 'params')
+          edit(params)
         })
         .catch(() => {
           message.warning('请按规则完善字段')
         })
+    }
+
+    async function getInfo() {
+      try {
+        let userId = LocalSave.getJson('cookieUser').id
+        const { errMsg, data, success } = await getUsersbyIds(userId)
+        if (success === true) {
+          state.formData = data.pop()
+          console.log(state.formData)
+        } else {
+          message.warn(errMsg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+
+    async function edit(info) {
+      try {
+        const { errMsg, data, success } = await putAlreadyStu(info)
+        if (success === true) {
+          message.success('修改成功')
+          router.push('/personal-page')
+        } else {
+          message.warn(errMsg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
     }
 
     function getBase64(img, callback) {
@@ -445,23 +483,23 @@ export default {
       reader.readAsDataURL(img)
     }
 
-    //上传change
-    const handleChange = info => {
-      if (info.file.status === 'uploading') {
-        state.loading = true
-        return
-      }
-      if (info.file.status === 'done') {
-        getBase64(info.file.originFileObj, base64Url => {
-          state.imageUrl = base64Url
-          state.loading = false
-        })
-      }
-      if (info.file.status === 'error') {
-        state.loading = false
-        message.error('上传失败，请重新上传！')
-      }
-    }
+    // //上传change
+    // const handleChange = info => {
+    //   if (info.file.status === 'uploading') {
+    //     state.loading = true
+    //     return
+    //   }
+    //   if (info.file.status === 'done') {
+    //     getBase64(info.file.originFileObj, base64Url => {
+    //       state.imageUrl = base64Url
+    //       state.loading = false
+    //     })
+    //   }
+    //   if (info.file.status === 'error') {
+    //     state.loading = false
+    //     message.error('上传失败，请重新上传！')
+    //   }
+    // }
 
     //上传之前校验
     const beforeUpload = file => {
@@ -475,6 +513,10 @@ export default {
       }
       return isJpgOrPng && isLt5M
     }
+
+    onMounted(() => {
+      getInfo()
+    })
 
     return {
       ...toRefs(state),
@@ -496,10 +538,11 @@ export default {
   .pohto-box {
     margin: 0 auto;
     width: 84px;
+    margin-left: calc(45%);
     height: 84px;
     border: 1px solid #cecece;
     border-radius: 50%;
-    padding: 2px;
+    text-align: center;
     margin-bottom: 20px;
     img {
       width: 80px;

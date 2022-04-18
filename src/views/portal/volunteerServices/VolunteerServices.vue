@@ -45,31 +45,36 @@
       @ok="onSubmit"
     >
       <a-form ref="formRef" :model="formState" :rules="rules">
-        <div class="item-box">
-          <span class="label">学生姓名:</span>
-          <span class="content">张三</span>
-        </div>
-        <div class="item-box">
-          <span class="label">高中学校:</span>
-          <span class="content">xxxx中学</span>
-        </div>
+        <a-form-item label="家访学生" name="studentName">
+          <a-input v-model:value="formState.studentName" :disabled="true" />
+        </a-form-item>
+        <a-form-item label="高中学校" name="highSchool">
+          <a-input v-model:value="formState.highschool" :disabled="true" />
+        </a-form-item>
         <a-form-item label="情况是否属实" name="isTrue">
           <a-select v-model:value="formState.isTrue">
-            <a-select-option :value="1">是</a-select-option>
-            <a-select-option :value="2">否</a-select-option>
+            <a-select-option value="是">是</a-select-option>
+            <a-select-option value="否">否</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="志愿者反馈" name="feedback">
           <a-textarea v-model:value="formState.feedback" />
         </a-form-item>
-        <div class="item-box">
-          <span class="label">家访志愿者:</span>
-          <span class="content">李四</span>
-        </div>
-        <a-form-item label="家访资料" name="fileList">
+        <a-form-item label="家访志愿者" name="volunteer">
+          <a-input v-model:value="formState.volunteer" />
+        </a-form-item>
+        <a-form-item label="家访资料" name="material">
+          <a v-if="!reload" :href="formState.material">点击下载</a>
+          <a-button style="margin-left: 10px" v-if="!reload" @click="reloadBtn"
+            >重新上传</a-button
+          >
+
           <a-upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            v-model:file-list="formState.fileList"
+            v-if="reload"
+            :defaultFileList="formState.fileList"
+            :limit="1"
+            action="/api/file/upload?path=apply/visit"
+            @change="handleChange"
           >
             <a-button>
               <upload-outlined></upload-outlined>
@@ -88,39 +93,41 @@
       <div class="apply-box">
         <div class="item">
           <span class="label">姓名：</span>
-          <span class="content">张三</span>
+          <span class="content">{{ currentObj.name }}</span>
         </div>
         <div class="item">
           <span class="label">家庭总人数：</span>
-          <span class="content">7</span>
+          <span class="content">{{ applyInfo.allPerson }}</span>
         </div>
         <div class="item">
           <span class="label">就业总人数：</span>
-          <span class="content">5</span>
+          <span class="content">{{ applyInfo.workPerson }}</span>
         </div>
         <div class="item">
           <span class="label">赡养人数：</span>
-          <span class="content">5</span>
+          <span class="content">{{ applyInfo.adaptPerson }}</span>
         </div>
         <div class="item">
           <span class="label">就学人数：</span>
-          <span class="content">3</span>
+          <span class="content">{{ applyInfo.studyPerson }}</span>
         </div>
         <div class="item">
           <span class="label">欠债金额：</span>
-          <span class="content">123123</span>
+          <span class="content">{{ applyInfo.debtMoney }}</span>
         </div>
         <div class="item">
           <span class="label">欠债原因：</span>
-          <span class="content">张三</span>
+          <span class="content">{{ applyInfo.debtResion }}</span>
         </div>
         <div class="item">
           <span class="label">是否申请助学贷款：</span>
-          <span class="content">是</span>
+          <span class="content">{{
+            applyInfo.isstuloans === 1 ? '是' : '否'
+          }}</span>
         </div>
         <div class="item">
           <span class="label">申请原因：</span>
-          <span class="content">张三</span>
+          <span class="content">{{ applyInfo.applyResion }}</span>
         </div>
       </div>
     </a-modal>
@@ -132,7 +139,8 @@ import { reactive, toRefs, ref } from 'vue'
 import portalTemplate from '@/components/mainTemplate/portal/portalTemplate'
 import { message } from 'ant-design-vue'
 import LocalSave from '@/utils/localSave'
-import { getStudentsByVolunteerId } from '@/hooks'
+import { getFundApply, getStudentsByVolunteerId } from '@/hooks'
+import { editFeedBack, getFeedBack, getFundApplyByUserId } from '@/services'
 export default {
   components: {
     portalTemplate
@@ -140,10 +148,13 @@ export default {
   setup() {
     const state = reactive({
       visible: false,
+      reload: true,
       applyVisible: false,
       currentObj: {},
+      applyInfo: {},
+      feedback: {},
       pageIndex: 1,
-      pageSize: 5,
+      pageSize: 2,
       columns: [
         {
           title: '姓名',
@@ -245,9 +256,15 @@ export default {
         }
       ],
       formState: {
-        isTrue: null,
-        feedback: null,
-        fileList: []
+        // isTrue: null,
+        // feedback: null,
+        // fileList: [],
+        // material: [
+        //   // {
+        //   //   name: '测试',
+        //   //   url: 'https://xpef.oss-cn-chengdu.aliyuncs.com/apply/visit/AI报告.docx'
+        //   // }
+        // ]
       },
       rules: {
         isTrue: [
@@ -264,10 +281,10 @@ export default {
             trigger: 'blur'
           }
         ],
-        fileList: [
+        volunteer: [
           {
             required: true,
-            message: '家访资料不能为空',
+            message: '家访志愿者姓名不能为空',
             trigger: 'blur'
           }
         ]
@@ -279,19 +296,75 @@ export default {
     )
     //家访反馈
     function feedback(record) {
+      getFeedback(record.id)
       state.visible = true
       state.currentObj = record
+      console.log(record, 'user')
+    }
+
+    async function setInfo(userId) {
+      try {
+        const { errMsg, data, success } = await getFundApplyByUserId(userId)
+        if (success === true) {
+          state.applyInfo = data
+          state.applyVisible = true
+        } else {
+          message.warn(errMsg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+
+    async function editFeedback(feedback) {
+      try {
+        const { errMsg, data, success } = await editFeedBack(feedback)
+        if (success === true && data === true) {
+          message.success('修改反馈表单成功')
+        } else {
+          message.warn(errMsg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+    //根据学生id获取家访反馈信息
+    async function getFeedback(userId) {
+      try {
+        const { errMsg, data, success } = await getFeedBack(userId)
+        if (success === true) {
+          if (data != null) {
+            state.formState = data
+            if (data.material != null) {
+              state.reload = false
+            }
+          } else {
+            state.formState = {
+              studentName: state.currentObj.name,
+              studentId: state.currentObj.id,
+              highschool: state.currentObj.highSchool
+            }
+          }
+        } else {
+          message.warn(errMsg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
     }
 
     //查看申请信息
     function applyBtn(record) {
-      state.applyVisible = true
       state.currentObj = record
+      setInfo(record.id)
     }
 
-    const handleChange = ({ file, fileList }) => {
-      if (file.status !== 'uploading') {
-        console.log(file, fileList)
+    const handleChange = info => {
+      const file = info.file
+      const status = info.file.status
+      if (status === 'done') {
+        const res = file.response.data
+        state.formState.material = res
       }
     }
 
@@ -305,10 +378,21 @@ export default {
             ...state.formState
           }
           console.log(params)
+          editFeedback(params)
         })
         .catch(error => {
           message.warning('请按规则完善字段')
         })
+    }
+    function changePage(pagination) {
+      console.log(' data ')
+      state.pageIndex = pagination.current
+      state.pageSize = pagination.pageSize
+      console.log(state.pageIndex)
+    }
+
+    function reloadBtn() {
+      state.reload = true
     }
 
     return {
@@ -319,7 +403,9 @@ export default {
       applyBtn,
       onSubmit,
       formRef,
-      handleChange
+      handleChange,
+      changePage,
+      reloadBtn
     }
   }
 }

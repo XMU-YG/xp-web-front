@@ -12,7 +12,7 @@
         {{ article.content }}
       </div>
       <div v-for="item in article.images" :key="item">
-        <a-image :src="item" style="width: 300px; object-fit: cover" />
+        <a-image :width="250" style="margin-top: 10px" :src="item" />
       </div>
     </div>
   </portalTemplate>
@@ -67,12 +67,20 @@ export default {
 <style scoped lang="less">
 .main-content-box {
   //min-height: calc(100%) !important;
+  width: calc(70%) !important;
   text-align: center;
+  margin-left: calc(15%) !important;
   .article-content {
     text-indent: 2em;
     line-height: 24px;
     font-size: 14px;
     text-align: left;
   }
+}
+
+.imgshow {
+  width: calc(50%) !important;
+  max-height: 300px;
+  object-fit: cover;
 }
 </style>

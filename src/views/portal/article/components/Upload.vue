@@ -45,29 +45,6 @@ export default defineComponent({
         name: 'image.png',
         status: 'done',
         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-      },
-      {
-        uid: '-2',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-      },
-      {
-        uid: '-3',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-      },
-      {
-        uid: '-4',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-      },
-      {
-        uid: '-5',
-        name: 'image.png',
-        status: 'error'
       }
     ])
 

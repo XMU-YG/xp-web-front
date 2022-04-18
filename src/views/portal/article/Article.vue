@@ -2,8 +2,8 @@
   <portalTemplate>
     <div class="nav">文章帖子</div>
     <div class="main-content-box">
-      <a-tabs v-model:activeKey="activeKey">
-        <a-tab-pane key="1" tab="所有文章">
+      <a-tabs @change="handleTagChange" v-model:activeKey="activeKey">
+        <a-tab-pane key="all" tab="所有文章">
           <div class="search">
             <a-input-search
               style="width: 50%"
@@ -14,15 +14,15 @@
             />
           </div>
           <a-row :gutter="[10, 20]" style="width: 100%">
-            <a-col :xxl="12" :xl="12" v-for="item in 20" :key="item">
-              <Card @click="openDetail" />
+            <a-col :xxl="12" :xl="12" v-for="item in list" :key="item.id">
+              <Card @click="openDetail(item.id)" :data="{ ...item }" />
             </a-col>
           </a-row>
           <div class="pagination">
-            <a-pagination v-model:current="current" :total="500" />
+            <a-pagination v-model:current="current" :total="total" />
           </div>
         </a-tab-pane>
-        <a-tab-pane key="2" tab="我的文章">
+        <a-tab-pane key="self" tab="我的文章">
           <div class="search">
             <a-input-search
               style="width: 50%"
@@ -33,12 +33,12 @@
             />
           </div>
           <a-row :gutter="[10, 20]" style="width: 100%">
-            <a-col :xxl="12" :xl="12" v-for="item in 20" :key="item">
-              <Card />
+            <a-col :xxl="12" :xl="12" v-for="item in list" :key="item.id">
+              <Card @click="openDetail(item.id)" :data="{ ...item }" />
             </a-col>
           </a-row>
           <div class="pagination">
-            <a-pagination v-model:current="current" :total="500" />
+            <a-pagination v-model:current="current" :total="total" />
           </div>
         </a-tab-pane>
         <template #tabBarExtraContent>
@@ -50,10 +50,13 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs } from 'vue'
 import portalTemplate from '@/components/mainTemplate/portal/portalTemplate'
-import Card from './components/Card'
 import { useRouter } from 'vue-router'
+import { getAllArticle, getArticleByUserId } from '@/services'
+import Card from '@/views/portal/home/components/Card'
+import { message } from 'ant-design-vue'
+import LocalSave from '@/utils/localSave'
 export default {
   components: {
     portalTemplate,
@@ -62,7 +65,10 @@ export default {
   setup() {
     const state = reactive({
       current: 1,
-      activeKey: '1'
+      activeKey: 'all',
+      list: [],
+      loading: false,
+      total: 0
     })
 
     const router = useRouter()
@@ -77,18 +83,68 @@ export default {
     }
 
     //查看详情
-    function openDetail() {
+    function openDetail(id) {
+      console.log(id)
       let routeData = router.resolve({
-        path: '/article-detail/' + 'ididididsafsdafdsafdsafd',
+        path: '/article-detail/' + id,
         query: { type: 'detail' }
       })
       window.open(routeData.href, '_blank')
     }
 
+    async function setList(params) {
+      try {
+        state.loading = true
+        const { errMsg, data, success } = await getAllArticle(params)
+        state.loading = false
+        if (success === true) {
+          state.list = data.list
+          console.log(state.list)
+          state.total = data.total
+        } else {
+          message.warn(errMsg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+
+    async function setArticles(userId) {
+      try {
+        state.loading = true
+        const { errMsg, data, success } = await getArticleByUserId(userId)
+        state.loading = false
+        if (success === true) {
+          state.list = data
+          state.total = data.length
+        } else {
+          message.warn(errMsg)
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+
+    function handleTagChange() {
+      console.log(state.activeKey)
+      if (state.activeKey === 'all') {
+        setList({
+          pageIndex: state.current
+        })
+      } else {
+        setArticles(LocalSave.getJson('cookieUser').id)
+      }
+    }
+
+    onMounted(() => {
+      setList()
+    })
+
     return {
       ...toRefs(state),
       publishBtn,
-      openDetail
+      openDetail,
+      handleTagChange
     }
   }
 }

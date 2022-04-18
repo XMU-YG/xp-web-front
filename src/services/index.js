@@ -36,8 +36,8 @@ export const deleteAlreadyStu = async id => {
  * 修改已受助学生信息
  * @returns Promise<{code: number, msg: string}>
  */
-export const putAlreadyStu = async params => {
-  return request.put('/api/user/student/updateInfo?studentInfo=' + params)
+export const putAlreadyStu = async info => {
+  return request.put('/api/user/student/updateInfo', info)
 }
 
 /**
@@ -140,8 +140,8 @@ export const getArticleByUserId = async userId => {
  * 创建文章
  * @returns Promise<{code: ntumber, data: Array, msg: string}>
  */
-export const createArticle = async params => {
-  return request.post('/api/article/create', params)
+export const createArticle = async article => {
+  return request.post('/api/article/create', article)
 }
 
 /**
@@ -217,4 +217,38 @@ export const login = async params => {
  */
 export const editVolunteer = async data => {
   return request.post('/api/volunteer/edit', data)
+}
+
+/**
+ * 根据用户id获取申请信息
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const getFundApplyByUserId = async userId => {
+  return request.get('/api/apply/student/' + userId)
+}
+
+/**
+ * 修改创建反馈表单
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const editFeedBack = async feedback => {
+  return request.post('/api/volunteer/feedback/edit', feedback)
+}
+
+/**
+ * 根据学生id获取反馈表单
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const getFeedBack = async studentId => {
+  return request.get('/api/volunteer/feedback/selectByStudentId', {
+    studentId: studentId
+  })
+}
+
+/**
+ * 根据学生id获取用户信息
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const getUsersbyIds = async studentId => {
+  return request.get('/api/user/student/list/' + studentId)
 }
