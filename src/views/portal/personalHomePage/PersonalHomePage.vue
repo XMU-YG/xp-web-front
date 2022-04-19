@@ -450,13 +450,16 @@ export default {
 
     async function getInfo() {
       try {
-        let userId = LocalSave.getJson('cookieUser').id
-        const { errMsg, data, success } = await getUsersbyIds(userId)
-        if (success === true) {
-          state.formData = data.pop()
-          console.log(state.formData)
-        } else {
-          message.warn(errMsg)
+        let userId = LocalSave.getJson('cookieUser')
+          ? LocalSave.getJson('cookieUser').id
+          : undefined
+        if (userId) {
+          const { errMsg, data, success } = await getUsersbyIds(userId)
+          if (success === true) {
+            state.formData = data.pop()
+          } else {
+            message.warn(errMsg)
+          }
         }
       } catch (error) {
         throw new Error(error)

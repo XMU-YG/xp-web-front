@@ -1,8 +1,8 @@
 import { createStore } from 'vuex'
+import currentMenu from './modeles/currentMenu'
 
 export default createStore({
-  state: {},
-  mutations: {},
-  actions: {},
-  modules: {}
+  modules: {
+    currentMenu
+  }
 })

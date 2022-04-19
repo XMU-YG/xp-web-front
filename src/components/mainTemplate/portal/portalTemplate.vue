@@ -14,6 +14,35 @@
                 style="height: 40px"
               />
             </div>
+            <div class="menu">
+              <a-menu
+                v-model:selectedKeys="selectedKeys"
+                mode="horizontal"
+                @select="select"
+              >
+                <a-menu-item key="home">
+                  <router-link to="/">首页</router-link>
+                </a-menu-item>
+                <a-menu-item
+                  v-if="menuList.indexOf('导师助手') > -1"
+                  key="tutor-service"
+                >
+                  <router-link to="/tutor-service">导师服务</router-link>
+                </a-menu-item>
+                <a-menu-item
+                  v-if="menuList.indexOf('志愿者服务') > -1"
+                  key="volunteer-service"
+                >
+                  <router-link to="/volunteer-service">志愿者服务</router-link>
+                </a-menu-item>
+                <a-menu-item key="article">
+                  <router-link to="/article">文章帖子</router-link>
+                </a-menu-item>
+                <a-menu-item key="personalPage">
+                  <router-link to="/personal-page">个人主页</router-link>
+                </a-menu-item>
+              </a-menu>
+            </div>
             <div class="login-wrap">
               <div class="header-imgage">
                 <my-icon type="icon-touxiang" class="my-icon" />
@@ -21,7 +50,7 @@
               <div class="person-info">
                 <a-dropdown>
                   <a href="javascript:;" class="current-user">
-                    {{ cookieUser.name }}
+                    {{ cookieUser ? cookieUser.name : '' }}
                     <DownOutlined style="color: #5b5e6e" />
                   </a>
                   <template #overlay>
@@ -57,29 +86,6 @@
               </div>
             </div>
           </div>
-          <div class="menu">
-            <a-menu
-              v-model:selectedKeys="selectedKeys"
-              mode="horizontal"
-              @select="select"
-            >
-              <a-menu-item key="/"> 首页 </a-menu-item>
-              <a-menu-item
-                v-if="menuList.indexOf('导师助手') > -1"
-                key="/tutor-service"
-              >
-                导师服务
-              </a-menu-item>
-              <a-menu-item
-                v-if="menuList.indexOf('志愿者服务') > -1"
-                key="/volunteer-service"
-              >
-                志愿者服务
-              </a-menu-item>
-              <a-menu-item key="/article"> 文章帖子 </a-menu-item>
-              <a-menu-item key="/personal-page"> 个人主页 </a-menu-item>
-            </a-menu>
-          </div>
         </div>
       </a-layout-header>
       <a-layout-content><slot></slot></a-layout-content>
@@ -97,22 +103,27 @@
 </template>
 
 <script>
-import { reactive, toRefs, onMounted } from 'vue'
+import { reactive, toRefs, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { getMenuList } from '@/services'
 import ResetPwd from '@/components/mainTemplate/portal/ResetPwd'
 import LocalSave from '@/utils/localSave'
+import { useStore } from 'vuex'
 export default {
   components: {
     ResetPwd
   },
   setup() {
     const router = useRouter()
+    const store = useStore()
     const state = reactive({
-      selectedKeys: ['/home'],
+      // selectedKeys: ['home'],
       menuList: [],
       visible: false,
       cookieUser: {}
+    })
+    const selectedKeys = computed(() => {
+      return store.state.currentMenu.currentMenu
     })
 
     onMounted(() => {
@@ -122,18 +133,24 @@ export default {
 
     async function getMenu() {
       try {
-        state.menuList = await getMenuList({
-          userId: LocalSave.getJson('cookieUser').id
-        })
+        let id = LocalSave.getJson('cookieUser')
+          ? LocalSave.getJson('cookieUser').id
+          : undefined
+        if (id) {
+          state.menuList = await getMenuList({
+            userId: id
+          })
+        }
       } catch (e) {
         throw Error(e)
       }
     }
 
     function select(e) {
-      console.log(state.selectedKeys, 'selectedKeys')
-      let url = `${e.key}`
-      router.push(url)
+      // let url = `${e.key}`
+      console.log('xxxxxxxx')
+      store.commit('currentMenu/changeCurrentMenu', e.key)
+      // router.push(url)
     }
     function returnSystem() {
       router.push('/alreadyStu-manager')
@@ -150,6 +167,7 @@ export default {
     return {
       ...toRefs(state),
       select,
+      selectedKeys,
       returnSystem,
       logOut,
       resetPwd
@@ -163,7 +181,6 @@ export default {
   height: 100%;
   margin: 0 auto;
   /deep/ header.ant-layout-header {
-    height: 107px;
     background: linear-gradient(180deg, #3d82d7, #5b8bf7);
     .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover,
     .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover,
@@ -187,7 +204,6 @@ export default {
       border-bottom: 2px solid #fff;
     }
     ul.ant-menu-overflow.ant-menu.ant-menu-root.ant-menu-horizontal.ant-menu-light {
-      padding: 0 26%;
     }
     .title-wrapper {
       margin: 0 auto;
@@ -237,10 +253,14 @@ export default {
         }
       }
       .menu {
-        position: relative;
-        top: -30px;
+        .ant-menu-horizontal {
+          border: none !important;
+        }
         .ant-menu {
           background: none !important;
+          color: #fff !important;
+        }
+        .ant-menu-horizontal > .ant-menu-item a {
           color: #fff !important;
         }
       }
