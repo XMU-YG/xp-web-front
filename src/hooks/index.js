@@ -13,7 +13,11 @@ import {
   getStudentByVolunteerId,
   getFundApplyByUserId,
   getAllArticle,
-  getArticleByUserId
+  getArticleByUserId,
+  sendCode,
+  reset,
+  logout,
+  checkLogin
 } from '@/services'
 import { reactive, toRefs, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
@@ -436,4 +440,70 @@ export function selfArticles(userId) {
     setArticles(userId)
   })
   return { ...toRefs(state), setArticles }
+}
+
+export async function sendCodeToEmail(email, type) {
+  try {
+    const { msg, data, success } = await sendCode({
+      email: email,
+      type: type
+    })
+    if (success === true) {
+      message.success('验证码已发送')
+    } else {
+      message.warn('发送失败')
+    }
+  } catch (error) {
+    message.warn('发送失败')
+  }
+}
+
+export async function resetPwd(vo) {
+  try {
+    const { errMsg, data, success } = await reset(vo)
+    if (success === true) {
+      message.success('修改成功')
+    } else {
+      message.warn(errMsg)
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export async function userLogout(userId) {
+  try {
+    const { errMsg, data, success } = await logout(userId)
+    if (success === true) {
+      message.success('已登出')
+    } else {
+      message.warn(errMsg)
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+//校验登录态
+export function loginCheck(userId) {
+  const state = reactive({
+    status: false
+  })
+  async function setStatus(userId) {
+    try {
+      const { errMsg, data, success } = await checkLogin(userId)
+      if (success === true) {
+        state.status = true
+        console.log(state.status, 'check')
+      } else {
+        message.warn(errMsg)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  onMounted(() => {
+    setStatus(userId)
+  })
+  return { ...toRefs(state), setStatus }
 }

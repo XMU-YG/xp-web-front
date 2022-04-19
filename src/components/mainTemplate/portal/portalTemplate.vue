@@ -69,12 +69,12 @@
                       </a-menu-item>
                       <a-menu-item key="resetPwd">
                         <a-button type="link" class="link-btn" @click="resetPwd"
-                          >修改密码</a-button
+                          ><edit-outlined />修改密码</a-button
                         >
                       </a-menu-item>
                       <a-menu-item key="logout">
                         <a-button type="link" class="link-btn" @click="logOut">
-                          登出
+                          <logout-outlined />登出
                         </a-button>
                       </a-menu-item>
                     </a-menu>
@@ -105,10 +105,12 @@
 <script>
 import { reactive, toRefs, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { getMenuList } from '@/services'
+import { checkLogin, getMenuList } from '@/services'
 import ResetPwd from '@/components/mainTemplate/portal/ResetPwd'
 import LocalSave from '@/utils/localSave'
 import { useStore } from 'vuex'
+import { userLogout } from '@/hooks'
+
 export default {
   components: {
     ResetPwd
@@ -119,17 +121,36 @@ export default {
     const state = reactive({
       // selectedKeys: ['home'],
       menuList: [],
+      status: true, //是否已登陆
       visible: false,
       cookieUser: {}
     })
     const selectedKeys = computed(() => {
       return store.state.currentMenu.currentMenu
     })
-
     onMounted(() => {
-      state.cookieUser = LocalSave.getJson('cookieUser')
-      getMenu()
+      let id = LocalSave.getJson('cookieUser').id
+      if (id === null) {
+        router.push('/login')
+      } else {
+        checkLoginStatus(id)
+      }
     })
+
+    async function checkLoginStatus(userId) {
+      try {
+        const { errMsg, data, success } = await checkLogin(userId)
+        if (success === true) {
+          //已登录
+          state.cookieUser = LocalSave.getJson('cookieUser')
+          getMenu()
+        } else {
+          router.push('/login')
+        }
+      } catch (error) {
+        router.push('/login')
+      }
+    }
 
     async function getMenu() {
       try {
@@ -157,6 +178,9 @@ export default {
     }
 
     function logOut() {
+      let id = LocalSave.getJson('cookieUser').id
+      userLogout(id)
+      LocalSave.removeStorage()
       router.push('/login')
     }
 
@@ -253,6 +277,7 @@ export default {
         }
       }
       .menu {
+        min-width: calc(40%) !important;
         .ant-menu-horizontal {
           border: none !important;
         }

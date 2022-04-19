@@ -10,6 +10,9 @@ export default class LocalSave {
   static getString(key) {
     return window.localStorage.getItem(key)
   }
+  static removeStorage() {
+    return window.localStorage.clear()
+  }
   static saveJson(key, val) {
     let str
     if (typeof val === 'string') {

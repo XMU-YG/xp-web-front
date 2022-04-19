@@ -252,3 +252,39 @@ export const getFeedBack = async studentId => {
 export const getUsersbyIds = async studentId => {
   return request.get('/api/user/student/list/' + studentId)
 }
+
+/**
+ * 重置密码
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const reset = async vo => {
+  return request.put('/api/user/reset', vo)
+}
+
+/**
+ * 发送验证码
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const sendCode = async parmas => {
+  return request.get('/api/code/send', parmas)
+}
+
+/**
+ * 校验登录态
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const checkLogin = async userId => {
+  return request.get('/api/user/checkLogin', {
+    userId: userId
+  })
+}
+
+/**
+ * 登出
+ * @returns Promise<{code: number, data: Array, msg: string}>
+ */
+export const logout = async userId => {
+  return request.get('/api/user/logout', {
+    userId: userId
+  })
+}

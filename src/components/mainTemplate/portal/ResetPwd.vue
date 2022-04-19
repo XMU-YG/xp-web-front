@@ -1,10 +1,9 @@
 <template>
   <a-form ref="formRef" :model="formState" :rules="rules">
-    <a-form-item label="邮箱" name="mail">
+    <a-form-item label="邮箱" name="email">
       <a-input
         style="width: 430px"
-        v-model:value="formState.mail"
-        type="password"
+        v-model:value="formState.email"
         autocomplete="off"
       />
     </a-form-item>
@@ -12,22 +11,13 @@
       <a-input
         style="width: 430px"
         v-model:value="formState.name"
-        type="password"
         autocomplete="off"
       />
     </a-form-item>
-    <a-form-item label="旧密码" name="oldPass">
+    <a-form-item label="新密码" name="password">
       <a-input
         style="width: 430px"
-        v-model:value="formState.oldPass"
-        type="password"
-        autocomplete="off"
-      />
-    </a-form-item>
-    <a-form-item label="新密码" name="newPass">
-      <a-input
-        style="width: 430px"
-        v-model:value="formState.newPass"
+        v-model:value="formState.password"
         type="password"
         autocomplete="off"
       />
@@ -40,17 +30,23 @@
         autocomplete="off"
       />
     </a-form-item>
-    <a-form-item label="验证码" name="code">
+    <a-form-item label="验证码" name="verifyCode">
       <a-input
         style="width: 230px"
-        v-model:value="formState.code"
-        type="password"
+        v-model:value="formState.verifyCode"
         autocomplete="off"
       />
-      <img alt="验证码" style="margin-left: 10px" />
+      <a-button
+        :disabled="haveSend"
+        @click="send"
+        type="primary"
+        style="margin-left: 10px"
+        >{{ text }}</a-button
+      >
+      <!-- <a-statistic-countdown :value="deadline" style="margin-left: 10px" /> -->
     </a-form-item>
     <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" html-type="submit" style="width: 430px"
+      <a-button type="primary" @click="submit" style="width: 430px"
         >立即修改</a-button
       >
     </a-form-item>
@@ -59,25 +55,25 @@
 <script>
 import { defineComponent, reactive, toRefs, ref } from 'vue'
 import { message } from 'ant-design-vue'
+import { resetPwd, sendCodeToEmail } from '@/hooks'
+import router from '@/router'
 export default defineComponent({
   setup() {
     const formRef = ref()
     const state = reactive({
-      formState: {
-        mail: '',
-        name: '',
-        oldPass: '',
-        newPass: '',
-        checkPass: '',
-        code: ''
-      },
+      haveSend: false,
+      formState: {},
+      text: '验证码',
+      timer: null,
+      deadline: Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30,
       rules: {
-        mail: [
+        email: [
           {
             required: true,
-            message: '邮箱不能为空',
+            message: '邮箱不能为空, 且格式正确',
             type: 'string',
-            trigger: ['blur', 'change']
+            trigger: ['blur', 'change'],
+            validator: validateEmail
           }
         ],
         name: [
@@ -88,15 +84,7 @@ export default defineComponent({
             trigger: ['blur', 'change']
           }
         ],
-        oldPass: [
-          {
-            required: true,
-            message: '旧密码不能为空',
-            type: 'string',
-            trigger: ['blur', 'change']
-          }
-        ],
-        newPass: [
+        password: [
           {
             required: true,
             message: '新密码不能为空',
@@ -117,7 +105,7 @@ export default defineComponent({
             validator: validateRules
           }
         ],
-        code: [
+        verifyCode: [
           {
             required: true,
             message: '验证码不能为空',
@@ -128,12 +116,53 @@ export default defineComponent({
       }
     })
 
+    function setTime() {
+      let countDownNum = 60
+      state.timer = setInterval(function () {
+        //这里把setInterval赋值给变量名为timer的变量
+
+        countDownNum--
+
+        state.text = countDownNum + ' s'
+
+        if (countDownNum == 0) {
+          clearInterval(state.timer)
+          state.haveSend = false
+          state.text = '验证码'
+        }
+      }, 1000)
+    }
+
+    function validateEmail(rule, value) {
+      var reg = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/
+      if (value && reg.test(value)) {
+        return Promise.resolve()
+      } else {
+        return Promise.reject('邮箱格式不正确')
+      }
+    }
+
+    function checkEmail(email) {
+      var reg = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/
+      return email && reg.test(email)
+    }
+
     //手机号码/联系电话自定义校验
     function validateRules(rule, value) {
-      if (!state.formState.newPass || state.formState.newPass === value) {
+      if (!state.formState.password || state.formState.password === value) {
         return Promise.resolve()
       } else {
         return Promise.reject('确认密码与新密码不一致')
+      }
+    }
+
+    function send() {
+      if (!checkEmail(state.formState.email)) {
+        message.warn('请输入邮箱')
+      } else {
+        state.haveSend = true
+        setTime()
+        sendCodeToEmail(state.formState.email, '重置密码')
       }
     }
 
@@ -144,7 +173,8 @@ export default defineComponent({
           const params = {
             ...state.formState
           }
-          console.log(params, 'params')
+          resetPwd(params)
+          router.push('/home')
         })
         .catch(() => {
           message.warning('请按规则完善字段')
@@ -154,13 +184,14 @@ export default defineComponent({
     return {
       ...toRefs(state),
       formRef,
-      submit
+      submit,
+      send
     }
   }
 })
 </script>
 <style scoped>
-/deep/ label.ant-form-item-required {
+.label.ant-form-item-required {
   display: inline-block;
   width: 95px;
   text-align: right;

@@ -154,7 +154,7 @@ export default {
       applyInfo: {},
       feedback: {},
       pageIndex: 1,
-      pageSize: 2,
+      pageSize: 5,
       columns: [
         {
           title: '姓名',
