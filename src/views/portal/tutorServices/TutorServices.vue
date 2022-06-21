@@ -227,7 +227,7 @@ export default {
     function lookReport(record) {
       state.visible = true
       state.currentObj = record
-      getReport(241)
+      getReport(record.id)
     }
     const { list, loading, setList } = getStudentsByMentorId(
       LocalSave.getJson('cookieUser').id
